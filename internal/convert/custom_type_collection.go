@@ -9,8 +9,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	specschema "github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/format"
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/schema"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/format"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/schema"
 )
 
 const (

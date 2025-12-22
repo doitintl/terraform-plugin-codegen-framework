@@ -6,7 +6,7 @@ package schema_test
 import (
 	"testing"
 
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/schema"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/schema"
 )
 
 func TestFrameworkIdentifier_Valid(t *testing.T) {

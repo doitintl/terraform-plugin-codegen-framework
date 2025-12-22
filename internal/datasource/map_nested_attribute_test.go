@@ -12,9 +12,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 	specschema "github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/convert"
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/model"
-	generatorschema "github.com/hashicorp/terraform-plugin-codegen-framework/internal/schema"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/convert"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/model"
+	generatorschema "github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/schema"
 )
 
 func TestGeneratorMapNestedAttribute_New(t *testing.T) {
