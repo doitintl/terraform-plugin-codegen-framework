@@ -48,6 +48,16 @@ func TestDescription_AppendValidators(t *testing.T) {
 			expectedDesc: "Desc\nPossible values: `val1`, `val2`",
 		},
 		{
+			name:        "Commas inside quotes",
+			initialDesc: stringPtr("Desc"),
+			validators: NewValidators(ValidatorTypeString, specschema.CustomValidators{
+				{
+					SchemaDefinition: `stringvalidator.OneOf("a,b", "c")`,
+				},
+			}),
+			expectedDesc: "Desc\nPossible values: `a,b`, `c`",
+		},
+		{
 			name:        "No OneOf",
 			initialDesc: stringPtr("Desc"),
 			validators: NewValidators(ValidatorTypeString, specschema.CustomValidators{
@@ -56,6 +66,20 @@ func TestDescription_AppendValidators(t *testing.T) {
 				},
 			}),
 			expectedDesc: "Desc",
+		},
+		{
+			name:        "Multiple OneOf (should append both)",
+			initialDesc: stringPtr("Desc"),
+			validators: NewValidators(ValidatorTypeString, specschema.CustomValidators{
+				{
+					SchemaDefinition: `stringvalidator.OneOf("a", "b")`,
+				},
+				{
+					// This case is artificial, usually there's only one OneOf, but good to test behavior
+					SchemaDefinition: `stringvalidator.OneOf("c", "d")`,
+				},
+			}),
+			expectedDesc: "Desc\nPossible values: `a`, `b`\nPossible values: `c`, `d`",
 		},
 	}
 
