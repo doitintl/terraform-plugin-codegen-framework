@@ -15,13 +15,13 @@ import (
 	"github.com/hashicorp/cli"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/spec"
 
-	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/datasource"
-	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/format"
-	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/input"
-	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/logging"
-	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/output"
-	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/schema"
-	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/validate"
+	"github.com/doitintl/terraform-plugin-codegen-framework/internal/datasource"
+	"github.com/doitintl/terraform-plugin-codegen-framework/internal/format"
+	"github.com/doitintl/terraform-plugin-codegen-framework/internal/input"
+	"github.com/doitintl/terraform-plugin-codegen-framework/internal/logging"
+	"github.com/doitintl/terraform-plugin-codegen-framework/internal/output"
+	"github.com/doitintl/terraform-plugin-codegen-framework/internal/schema"
+	"github.com/doitintl/terraform-plugin-codegen-framework/internal/validate"
 )
 
 type GenerateDataSourcesCommand struct {

@@ -9,9 +9,9 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 
-	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/convert"
-	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/model"
-	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/schema"
+	"github.com/doitintl/terraform-plugin-codegen-framework/internal/convert"
+	"github.com/doitintl/terraform-plugin-codegen-framework/internal/model"
+	"github.com/doitintl/terraform-plugin-codegen-framework/internal/schema"
 )
 
 type GeneratorInt64Attribute struct {
