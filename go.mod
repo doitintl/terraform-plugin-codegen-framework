@@ -1,4 +1,4 @@
-module github.com/doitintl/terraform-plugin-codegen-framework
+module github.com/hanneshayashi/terraform-plugin-codegen-framework
 
 go 1.24.0
 

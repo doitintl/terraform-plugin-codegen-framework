@@ -15,8 +15,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-codegen-spec/code"
 	specschema "github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
-	"github.com/doitintl/terraform-plugin-codegen-framework/internal/logging"
-	"github.com/doitintl/terraform-plugin-codegen-framework/internal/model"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/logging"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/model"
 )
 
 type GeneratorSchema struct {

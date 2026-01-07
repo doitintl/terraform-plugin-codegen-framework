@@ -8,7 +8,7 @@ import (
 
 	specschema "github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
-	generatorschema "github.com/doitintl/terraform-plugin-codegen-framework/internal/schema"
+	generatorschema "github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/schema"
 )
 
 type DefaultCustom struct {
