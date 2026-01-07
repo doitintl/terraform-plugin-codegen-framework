@@ -41,6 +41,8 @@ func NewGeneratorStringAttribute(name string, a *provider.StringAttribute) (Gene
 
 	v := convert.NewValidators(convert.ValidatorTypeString, a.Validators.CustomValidators())
 
+	d.AppendValidators(v)
+
 	return GeneratorStringAttribute{
 		AssociatedExternalType: schema.NewAssocExtType(a.AssociatedExternalType),
 		OptionalRequired:       c,
