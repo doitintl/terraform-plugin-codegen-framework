@@ -15,13 +15,13 @@ import (
 	"github.com/hashicorp/cli"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/spec"
 
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/format"
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/input"
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/logging"
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/output"
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/provider"
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/schema"
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/validate"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/format"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/input"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/logging"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/output"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/provider"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/schema"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/validate"
 )
 
 type GenerateProviderCommand struct {

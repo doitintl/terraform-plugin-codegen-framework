@@ -6,8 +6,8 @@ package cmd_test
 import (
 	"testing"
 
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/cmd"
 	"github.com/hashicorp/cli"
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/cmd"
 )
 
 func TestScaffoldProviderCommand(t *testing.T) {

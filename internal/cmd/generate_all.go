@@ -14,8 +14,8 @@ import (
 	"github.com/hashicorp/cli"
 	"github.com/hashicorp/terraform-plugin-codegen-spec/spec"
 
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/input"
-	"github.com/hashicorp/terraform-plugin-codegen-framework/internal/validate"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/input"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/validate"
 )
 
 type GenerateAllCommand struct {
