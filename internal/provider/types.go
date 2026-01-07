@@ -6,7 +6,7 @@ package provider
 import (
 	specschema "github.com/hashicorp/terraform-plugin-codegen-spec/schema"
 
-	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/schema"
+	"github.com/doitintl/terraform-plugin-codegen-framework/internal/schema"
 )
 
 type GeneratorNestedAttributeObject struct {
