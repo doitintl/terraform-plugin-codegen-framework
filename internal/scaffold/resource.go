@@ -7,7 +7,7 @@ import (
 	"bytes"
 	"text/template"
 
-	"github.com/doitintl/terraform-plugin-codegen-framework/internal/schema"
+	"github.com/hanneshayashi/terraform-plugin-codegen-framework/internal/schema"
 )
 
 // ResourceBytes will create scaffolding Go code bytes for a Terraform Plugin Framework resource
