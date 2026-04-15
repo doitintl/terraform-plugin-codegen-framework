@@ -15,10 +15,6 @@ import (
 // It uses go/parser to safely extract values from the schema definition, handling
 // escaped quotes, commas, and other Go syntax correctly.
 func (d *Description) AppendValidators(v Validators) {
-	if d.description == nil {
-		empty := ""
-		d.description = &empty
-	}
 
 	for _, custom := range v.custom {
 		if custom.SchemaDefinition == "" {
@@ -79,6 +75,12 @@ func (d *Description) AppendValidators(v Validators) {
 
 			if len(values) > 0 {
 				suffix := fmt.Sprintf("Possible values: %s", strings.Join(values, ", "))
+
+				// Lazily initialize description when we have values to append
+				if d.description == nil {
+					empty := ""
+					d.description = &empty
+				}
 
 				// Avoid appending if already present
 				if strings.Contains(*d.description, suffix) {

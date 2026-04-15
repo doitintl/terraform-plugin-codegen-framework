@@ -33,6 +33,9 @@ type Validators struct {
 }
 
 func NewValidators(t ValidatorType, c specschema.CustomValidators) Validators {
+	if c == nil {
+		c = specschema.CustomValidators{}
+	}
 	return Validators{
 		validatorType: t,
 		custom:        c,

@@ -33,6 +33,9 @@ type PlanModifiers struct {
 }
 
 func NewPlanModifiers(t PlanModifierType, c specschema.CustomPlanModifiers) PlanModifiers {
+	if c == nil {
+		c = specschema.CustomPlanModifiers{}
+	}
 	return PlanModifiers{
 		planModifierType: t,
 		custom:           c,

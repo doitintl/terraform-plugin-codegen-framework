@@ -1738,33 +1738,10 @@ func (v ListNestedAttributeThreeValue) String() string {
 func (v ListNestedAttributeThreeValue) ToObjectValue(ctx context.Context) (basetypes.ObjectValue, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	listNestedAttributeThreeListNestedAttributeOne := types.ListValueMust(
-		ListNestedAttributeThreeListNestedAttributeOneType{
-			basetypes.ObjectType{
-				AttrTypes: ListNestedAttributeThreeListNestedAttributeOneValue{}.AttributeTypes(ctx),
-			},
-		},
-		v.ListNestedAttributeThreeListNestedAttributeOne.Elements(),
-	)
+	var listNestedAttributeThreeListNestedAttributeOne attr.Value
 
-	if v.ListNestedAttributeThreeListNestedAttributeOne.IsNull() {
-		listNestedAttributeThreeListNestedAttributeOne = types.ListNull(
-			ListNestedAttributeThreeListNestedAttributeOneType{
-				basetypes.ObjectType{
-					AttrTypes: ListNestedAttributeThreeListNestedAttributeOneValue{}.AttributeTypes(ctx),
-				},
-			},
-		)
-	}
-
-	if v.ListNestedAttributeThreeListNestedAttributeOne.IsUnknown() {
-		listNestedAttributeThreeListNestedAttributeOne = types.ListUnknown(
-			ListNestedAttributeThreeListNestedAttributeOneType{
-				basetypes.ObjectType{
-					AttrTypes: ListNestedAttributeThreeListNestedAttributeOneValue{}.AttributeTypes(ctx),
-				},
-			},
-		)
+	{
+		listNestedAttributeThreeListNestedAttributeOne = v.ListNestedAttributeThreeListNestedAttributeOne
 	}
 
 	attributeTypes := map[string]attr.Type{
@@ -2534,33 +2511,10 @@ func (v ListNestedAttributeTwoValue) String() string {
 func (v ListNestedAttributeTwoValue) ToObjectValue(ctx context.Context) (basetypes.ObjectValue, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	listNestedAttributeTwoListNestedAttributeOne := types.ListValueMust(
-		ListNestedAttributeTwoListNestedAttributeOneType{
-			basetypes.ObjectType{
-				AttrTypes: ListNestedAttributeTwoListNestedAttributeOneValue{}.AttributeTypes(ctx),
-			},
-		},
-		v.ListNestedAttributeTwoListNestedAttributeOne.Elements(),
-	)
+	var listNestedAttributeTwoListNestedAttributeOne attr.Value
 
-	if v.ListNestedAttributeTwoListNestedAttributeOne.IsNull() {
-		listNestedAttributeTwoListNestedAttributeOne = types.ListNull(
-			ListNestedAttributeTwoListNestedAttributeOneType{
-				basetypes.ObjectType{
-					AttrTypes: ListNestedAttributeTwoListNestedAttributeOneValue{}.AttributeTypes(ctx),
-				},
-			},
-		)
-	}
-
-	if v.ListNestedAttributeTwoListNestedAttributeOne.IsUnknown() {
-		listNestedAttributeTwoListNestedAttributeOne = types.ListUnknown(
-			ListNestedAttributeTwoListNestedAttributeOneType{
-				basetypes.ObjectType{
-					AttrTypes: ListNestedAttributeTwoListNestedAttributeOneValue{}.AttributeTypes(ctx),
-				},
-			},
-		)
+	{
+		listNestedAttributeTwoListNestedAttributeOne = v.ListNestedAttributeTwoListNestedAttributeOne
 	}
 
 	attributeTypes := map[string]attr.Type{
@@ -4939,12 +4893,12 @@ func (t SingleNestedAttributeThreeType) ValueFromObject(ctx context.Context, in 
 		return nil, diags
 	}
 
-	singleNestedAttributeThreeSingleNestedAttributeOneVal, ok := singleNestedAttributeThreeSingleNestedAttributeOneAttribute.(basetypes.ObjectValue)
+	singleNestedAttributeThreeSingleNestedAttributeOneVal, ok := singleNestedAttributeThreeSingleNestedAttributeOneAttribute.(SingleNestedAttributeThreeSingleNestedAttributeOneValue)
 
 	if !ok {
 		diags.AddError(
 			"Attribute Wrong Type",
-			fmt.Sprintf(`single_nested_attribute_three_single_nested_attribute_one expected to be basetypes.ObjectValue, was: %T`, singleNestedAttributeThreeSingleNestedAttributeOneAttribute))
+			fmt.Sprintf(`single_nested_attribute_three_single_nested_attribute_one expected to be SingleNestedAttributeThreeSingleNestedAttributeOneValue, was: %T`, singleNestedAttributeThreeSingleNestedAttributeOneAttribute))
 	}
 
 	if diags.HasError() {
@@ -5030,12 +4984,12 @@ func NewSingleNestedAttributeThreeValue(attributeTypes map[string]attr.Type, att
 		return NewSingleNestedAttributeThreeValueUnknown(), diags
 	}
 
-	singleNestedAttributeThreeSingleNestedAttributeOneVal, ok := singleNestedAttributeThreeSingleNestedAttributeOneAttribute.(basetypes.ObjectValue)
+	singleNestedAttributeThreeSingleNestedAttributeOneVal, ok := singleNestedAttributeThreeSingleNestedAttributeOneAttribute.(SingleNestedAttributeThreeSingleNestedAttributeOneValue)
 
 	if !ok {
 		diags.AddError(
 			"Attribute Wrong Type",
-			fmt.Sprintf(`single_nested_attribute_three_single_nested_attribute_one expected to be basetypes.ObjectValue, was: %T`, singleNestedAttributeThreeSingleNestedAttributeOneAttribute))
+			fmt.Sprintf(`single_nested_attribute_three_single_nested_attribute_one expected to be SingleNestedAttributeThreeSingleNestedAttributeOneValue, was: %T`, singleNestedAttributeThreeSingleNestedAttributeOneAttribute))
 	}
 
 	if diags.HasError() {
@@ -5116,7 +5070,7 @@ func (t SingleNestedAttributeThreeType) ValueType(ctx context.Context) attr.Valu
 var _ basetypes.ObjectValuable = SingleNestedAttributeThreeValue{}
 
 type SingleNestedAttributeThreeValue struct {
-	SingleNestedAttributeThreeSingleNestedAttributeOne basetypes.ObjectValue `tfsdk:"single_nested_attribute_three_single_nested_attribute_one"`
+	SingleNestedAttributeThreeSingleNestedAttributeOne SingleNestedAttributeThreeSingleNestedAttributeOneValue `tfsdk:"single_nested_attribute_three_single_nested_attribute_one"`
 	state                                              attr.ValueState
 }
 
@@ -5126,8 +5080,10 @@ func (v SingleNestedAttributeThreeValue) ToTerraformValue(ctx context.Context) (
 	var val tftypes.Value
 	var err error
 
-	attrTypes["single_nested_attribute_three_single_nested_attribute_one"] = basetypes.ObjectType{
-		AttrTypes: SingleNestedAttributeThreeSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
+	attrTypes["single_nested_attribute_three_single_nested_attribute_one"] = SingleNestedAttributeThreeSingleNestedAttributeOneType{
+		basetypes.ObjectType{
+			AttrTypes: SingleNestedAttributeThreeSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
+		},
 	}.TerraformType(ctx)
 
 	objectType := tftypes.Object{AttributeTypes: attrTypes}
@@ -5173,30 +5129,17 @@ func (v SingleNestedAttributeThreeValue) String() string {
 func (v SingleNestedAttributeThreeValue) ToObjectValue(ctx context.Context) (basetypes.ObjectValue, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var singleNestedAttributeThreeSingleNestedAttributeOne basetypes.ObjectValue
+	var singleNestedAttributeThreeSingleNestedAttributeOne attr.Value
 
-	if v.SingleNestedAttributeThreeSingleNestedAttributeOne.IsNull() {
-		singleNestedAttributeThreeSingleNestedAttributeOne = types.ObjectNull(
-			SingleNestedAttributeThreeSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
-		)
-	}
-
-	if v.SingleNestedAttributeThreeSingleNestedAttributeOne.IsUnknown() {
-		singleNestedAttributeThreeSingleNestedAttributeOne = types.ObjectUnknown(
-			SingleNestedAttributeThreeSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
-		)
-	}
-
-	if !v.SingleNestedAttributeThreeSingleNestedAttributeOne.IsNull() && !v.SingleNestedAttributeThreeSingleNestedAttributeOne.IsUnknown() {
-		singleNestedAttributeThreeSingleNestedAttributeOne = types.ObjectValueMust(
-			SingleNestedAttributeThreeSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
-			v.SingleNestedAttributeThreeSingleNestedAttributeOne.Attributes(),
-		)
+	{
+		singleNestedAttributeThreeSingleNestedAttributeOne = v.SingleNestedAttributeThreeSingleNestedAttributeOne
 	}
 
 	attributeTypes := map[string]attr.Type{
-		"single_nested_attribute_three_single_nested_attribute_one": basetypes.ObjectType{
-			AttrTypes: SingleNestedAttributeThreeSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
+		"single_nested_attribute_three_single_nested_attribute_one": SingleNestedAttributeThreeSingleNestedAttributeOneType{
+			basetypes.ObjectType{
+				AttrTypes: SingleNestedAttributeThreeSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
+			},
 		},
 	}
 
@@ -5249,8 +5192,10 @@ func (v SingleNestedAttributeThreeValue) Type(ctx context.Context) attr.Type {
 
 func (v SingleNestedAttributeThreeValue) AttributeTypes(ctx context.Context) map[string]attr.Type {
 	return map[string]attr.Type{
-		"single_nested_attribute_three_single_nested_attribute_one": basetypes.ObjectType{
-			AttrTypes: SingleNestedAttributeThreeSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
+		"single_nested_attribute_three_single_nested_attribute_one": SingleNestedAttributeThreeSingleNestedAttributeOneType{
+			basetypes.ObjectType{
+				AttrTypes: SingleNestedAttributeThreeSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
+			},
 		},
 	}
 }
@@ -5640,12 +5585,12 @@ func (t SingleNestedAttributeTwoType) ValueFromObject(ctx context.Context, in ba
 		return nil, diags
 	}
 
-	singleNestedAttributeTwoSingleNestedAttributeOneVal, ok := singleNestedAttributeTwoSingleNestedAttributeOneAttribute.(basetypes.ObjectValue)
+	singleNestedAttributeTwoSingleNestedAttributeOneVal, ok := singleNestedAttributeTwoSingleNestedAttributeOneAttribute.(SingleNestedAttributeTwoSingleNestedAttributeOneValue)
 
 	if !ok {
 		diags.AddError(
 			"Attribute Wrong Type",
-			fmt.Sprintf(`single_nested_attribute_two_single_nested_attribute_one expected to be basetypes.ObjectValue, was: %T`, singleNestedAttributeTwoSingleNestedAttributeOneAttribute))
+			fmt.Sprintf(`single_nested_attribute_two_single_nested_attribute_one expected to be SingleNestedAttributeTwoSingleNestedAttributeOneValue, was: %T`, singleNestedAttributeTwoSingleNestedAttributeOneAttribute))
 	}
 
 	if diags.HasError() {
@@ -5731,12 +5676,12 @@ func NewSingleNestedAttributeTwoValue(attributeTypes map[string]attr.Type, attri
 		return NewSingleNestedAttributeTwoValueUnknown(), diags
 	}
 
-	singleNestedAttributeTwoSingleNestedAttributeOneVal, ok := singleNestedAttributeTwoSingleNestedAttributeOneAttribute.(basetypes.ObjectValue)
+	singleNestedAttributeTwoSingleNestedAttributeOneVal, ok := singleNestedAttributeTwoSingleNestedAttributeOneAttribute.(SingleNestedAttributeTwoSingleNestedAttributeOneValue)
 
 	if !ok {
 		diags.AddError(
 			"Attribute Wrong Type",
-			fmt.Sprintf(`single_nested_attribute_two_single_nested_attribute_one expected to be basetypes.ObjectValue, was: %T`, singleNestedAttributeTwoSingleNestedAttributeOneAttribute))
+			fmt.Sprintf(`single_nested_attribute_two_single_nested_attribute_one expected to be SingleNestedAttributeTwoSingleNestedAttributeOneValue, was: %T`, singleNestedAttributeTwoSingleNestedAttributeOneAttribute))
 	}
 
 	if diags.HasError() {
@@ -5817,7 +5762,7 @@ func (t SingleNestedAttributeTwoType) ValueType(ctx context.Context) attr.Value 
 var _ basetypes.ObjectValuable = SingleNestedAttributeTwoValue{}
 
 type SingleNestedAttributeTwoValue struct {
-	SingleNestedAttributeTwoSingleNestedAttributeOne basetypes.ObjectValue `tfsdk:"single_nested_attribute_two_single_nested_attribute_one"`
+	SingleNestedAttributeTwoSingleNestedAttributeOne SingleNestedAttributeTwoSingleNestedAttributeOneValue `tfsdk:"single_nested_attribute_two_single_nested_attribute_one"`
 	state                                            attr.ValueState
 }
 
@@ -5827,8 +5772,10 @@ func (v SingleNestedAttributeTwoValue) ToTerraformValue(ctx context.Context) (tf
 	var val tftypes.Value
 	var err error
 
-	attrTypes["single_nested_attribute_two_single_nested_attribute_one"] = basetypes.ObjectType{
-		AttrTypes: SingleNestedAttributeTwoSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
+	attrTypes["single_nested_attribute_two_single_nested_attribute_one"] = SingleNestedAttributeTwoSingleNestedAttributeOneType{
+		basetypes.ObjectType{
+			AttrTypes: SingleNestedAttributeTwoSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
+		},
 	}.TerraformType(ctx)
 
 	objectType := tftypes.Object{AttributeTypes: attrTypes}
@@ -5874,30 +5821,17 @@ func (v SingleNestedAttributeTwoValue) String() string {
 func (v SingleNestedAttributeTwoValue) ToObjectValue(ctx context.Context) (basetypes.ObjectValue, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var singleNestedAttributeTwoSingleNestedAttributeOne basetypes.ObjectValue
+	var singleNestedAttributeTwoSingleNestedAttributeOne attr.Value
 
-	if v.SingleNestedAttributeTwoSingleNestedAttributeOne.IsNull() {
-		singleNestedAttributeTwoSingleNestedAttributeOne = types.ObjectNull(
-			SingleNestedAttributeTwoSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
-		)
-	}
-
-	if v.SingleNestedAttributeTwoSingleNestedAttributeOne.IsUnknown() {
-		singleNestedAttributeTwoSingleNestedAttributeOne = types.ObjectUnknown(
-			SingleNestedAttributeTwoSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
-		)
-	}
-
-	if !v.SingleNestedAttributeTwoSingleNestedAttributeOne.IsNull() && !v.SingleNestedAttributeTwoSingleNestedAttributeOne.IsUnknown() {
-		singleNestedAttributeTwoSingleNestedAttributeOne = types.ObjectValueMust(
-			SingleNestedAttributeTwoSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
-			v.SingleNestedAttributeTwoSingleNestedAttributeOne.Attributes(),
-		)
+	{
+		singleNestedAttributeTwoSingleNestedAttributeOne = v.SingleNestedAttributeTwoSingleNestedAttributeOne
 	}
 
 	attributeTypes := map[string]attr.Type{
-		"single_nested_attribute_two_single_nested_attribute_one": basetypes.ObjectType{
-			AttrTypes: SingleNestedAttributeTwoSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
+		"single_nested_attribute_two_single_nested_attribute_one": SingleNestedAttributeTwoSingleNestedAttributeOneType{
+			basetypes.ObjectType{
+				AttrTypes: SingleNestedAttributeTwoSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
+			},
 		},
 	}
 
@@ -5950,8 +5884,10 @@ func (v SingleNestedAttributeTwoValue) Type(ctx context.Context) attr.Type {
 
 func (v SingleNestedAttributeTwoValue) AttributeTypes(ctx context.Context) map[string]attr.Type {
 	return map[string]attr.Type{
-		"single_nested_attribute_two_single_nested_attribute_one": basetypes.ObjectType{
-			AttrTypes: SingleNestedAttributeTwoSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
+		"single_nested_attribute_two_single_nested_attribute_one": SingleNestedAttributeTwoSingleNestedAttributeOneType{
+			basetypes.ObjectType{
+				AttrTypes: SingleNestedAttributeTwoSingleNestedAttributeOneValue{}.AttributeTypes(ctx),
+			},
 		},
 	}
 }
@@ -7469,33 +7405,10 @@ func (v ListNestedBlockThreeValue) String() string {
 func (v ListNestedBlockThreeValue) ToObjectValue(ctx context.Context) (basetypes.ObjectValue, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	listNestedBlockThreeListNestedBlockOne := types.ListValueMust(
-		ListNestedBlockThreeListNestedBlockOneType{
-			basetypes.ObjectType{
-				AttrTypes: ListNestedBlockThreeListNestedBlockOneValue{}.AttributeTypes(ctx),
-			},
-		},
-		v.ListNestedBlockThreeListNestedBlockOne.Elements(),
-	)
+	var listNestedBlockThreeListNestedBlockOne attr.Value
 
-	if v.ListNestedBlockThreeListNestedBlockOne.IsNull() {
-		listNestedBlockThreeListNestedBlockOne = types.ListNull(
-			ListNestedBlockThreeListNestedBlockOneType{
-				basetypes.ObjectType{
-					AttrTypes: ListNestedBlockThreeListNestedBlockOneValue{}.AttributeTypes(ctx),
-				},
-			},
-		)
-	}
-
-	if v.ListNestedBlockThreeListNestedBlockOne.IsUnknown() {
-		listNestedBlockThreeListNestedBlockOne = types.ListUnknown(
-			ListNestedBlockThreeListNestedBlockOneType{
-				basetypes.ObjectType{
-					AttrTypes: ListNestedBlockThreeListNestedBlockOneValue{}.AttributeTypes(ctx),
-				},
-			},
-		)
+	{
+		listNestedBlockThreeListNestedBlockOne = v.ListNestedBlockThreeListNestedBlockOne
 	}
 
 	objectAttributeVal, d := types.ObjectValue(v.ObjectAttribute.AttributeTypes(ctx), v.ObjectAttribute.Attributes())
@@ -8206,33 +8119,10 @@ func (v ListNestedBlockTwoValue) String() string {
 func (v ListNestedBlockTwoValue) ToObjectValue(ctx context.Context) (basetypes.ObjectValue, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	listNestedBlockTwoListNestedBlockOne := types.ListValueMust(
-		ListNestedBlockTwoListNestedBlockOneType{
-			basetypes.ObjectType{
-				AttrTypes: ListNestedBlockTwoListNestedBlockOneValue{}.AttributeTypes(ctx),
-			},
-		},
-		v.ListNestedBlockTwoListNestedBlockOne.Elements(),
-	)
+	var listNestedBlockTwoListNestedBlockOne attr.Value
 
-	if v.ListNestedBlockTwoListNestedBlockOne.IsNull() {
-		listNestedBlockTwoListNestedBlockOne = types.ListNull(
-			ListNestedBlockTwoListNestedBlockOneType{
-				basetypes.ObjectType{
-					AttrTypes: ListNestedBlockTwoListNestedBlockOneValue{}.AttributeTypes(ctx),
-				},
-			},
-		)
-	}
-
-	if v.ListNestedBlockTwoListNestedBlockOne.IsUnknown() {
-		listNestedBlockTwoListNestedBlockOne = types.ListUnknown(
-			ListNestedBlockTwoListNestedBlockOneType{
-				basetypes.ObjectType{
-					AttrTypes: ListNestedBlockTwoListNestedBlockOneValue{}.AttributeTypes(ctx),
-				},
-			},
-		)
+	{
+		listNestedBlockTwoListNestedBlockOne = v.ListNestedBlockTwoListNestedBlockOne
 	}
 
 	attributeTypes := map[string]attr.Type{
@@ -10353,33 +10243,10 @@ func (v SingleNestedBlockThreeValue) String() string {
 func (v SingleNestedBlockThreeValue) ToObjectValue(ctx context.Context) (basetypes.ObjectValue, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	singleNestedBlockThreeListNestedBlockOne := types.ListValueMust(
-		SingleNestedBlockThreeListNestedBlockOneType{
-			basetypes.ObjectType{
-				AttrTypes: SingleNestedBlockThreeListNestedBlockOneValue{}.AttributeTypes(ctx),
-			},
-		},
-		v.SingleNestedBlockThreeListNestedBlockOne.Elements(),
-	)
+	var singleNestedBlockThreeListNestedBlockOne attr.Value
 
-	if v.SingleNestedBlockThreeListNestedBlockOne.IsNull() {
-		singleNestedBlockThreeListNestedBlockOne = types.ListNull(
-			SingleNestedBlockThreeListNestedBlockOneType{
-				basetypes.ObjectType{
-					AttrTypes: SingleNestedBlockThreeListNestedBlockOneValue{}.AttributeTypes(ctx),
-				},
-			},
-		)
-	}
-
-	if v.SingleNestedBlockThreeListNestedBlockOne.IsUnknown() {
-		singleNestedBlockThreeListNestedBlockOne = types.ListUnknown(
-			SingleNestedBlockThreeListNestedBlockOneType{
-				basetypes.ObjectType{
-					AttrTypes: SingleNestedBlockThreeListNestedBlockOneValue{}.AttributeTypes(ctx),
-				},
-			},
-		)
+	{
+		singleNestedBlockThreeListNestedBlockOne = v.SingleNestedBlockThreeListNestedBlockOne
 	}
 
 	objectAttributeVal, d := types.ObjectValue(v.ObjectAttribute.AttributeTypes(ctx), v.ObjectAttribute.Attributes())
@@ -11090,25 +10957,10 @@ func (v SingleNestedBlockTwoValue) String() string {
 func (v SingleNestedBlockTwoValue) ToObjectValue(ctx context.Context) (basetypes.ObjectValue, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
-	var singleNestedBlockTwoSingleNestedBlockOne basetypes.ObjectValue
+	var singleNestedBlockTwoSingleNestedBlockOne attr.Value
 
-	if v.SingleNestedBlockTwoSingleNestedBlockOne.IsNull() {
-		singleNestedBlockTwoSingleNestedBlockOne = types.ObjectNull(
-			SingleNestedBlockTwoSingleNestedBlockOneValue{}.AttributeTypes(ctx),
-		)
-	}
-
-	if v.SingleNestedBlockTwoSingleNestedBlockOne.IsUnknown() {
-		singleNestedBlockTwoSingleNestedBlockOne = types.ObjectUnknown(
-			SingleNestedBlockTwoSingleNestedBlockOneValue{}.AttributeTypes(ctx),
-		)
-	}
-
-	if !v.SingleNestedBlockTwoSingleNestedBlockOne.IsNull() && !v.SingleNestedBlockTwoSingleNestedBlockOne.IsUnknown() {
-		singleNestedBlockTwoSingleNestedBlockOne = types.ObjectValueMust(
-			SingleNestedBlockTwoSingleNestedBlockOneValue{}.AttributeTypes(ctx),
-			v.SingleNestedBlockTwoSingleNestedBlockOne.Attributes(),
-		)
+	{
+		singleNestedBlockTwoSingleNestedBlockOne = v.SingleNestedBlockTwoSingleNestedBlockOne
 	}
 
 	attributeTypes := map[string]attr.Type{
