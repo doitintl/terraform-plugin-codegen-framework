@@ -58,11 +58,11 @@ func (d DefaultString) Schema() []byte {
 	}
 
 	if d.stringDefault.Static != nil {
-		return []byte(fmt.Sprintf("Default: stringdefault.StaticString(%q),\n", *d.stringDefault.Static))
+		return fmt.Appendf(nil, "Default: stringdefault.StaticString(%q),\n", *d.stringDefault.Static)
 	}
 
 	if d.stringDefault.Custom != nil && d.stringDefault.Custom.SchemaDefinition != "" {
-		return []byte(fmt.Sprintf("Default: %s,\n", d.stringDefault.Custom.SchemaDefinition))
+		return fmt.Appendf(nil, "Default: %s,\n", d.stringDefault.Custom.SchemaDefinition)
 	}
 
 	return nil

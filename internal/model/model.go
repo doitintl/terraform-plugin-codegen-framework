@@ -36,13 +36,13 @@ type Model struct {
 }
 
 func (m Model) String() string {
-	var fieldsStr string
+	var fieldsStr strings.Builder
 
 	for _, field := range m.Fields {
-		fieldsStr += field.String() + "\n"
+		fieldsStr.WriteString(field.String() + "\n")
 	}
 
-	fieldsStrTrim := strings.TrimSuffix(fieldsStr, "\n")
+	fieldsStrTrim := strings.TrimSuffix(fieldsStr.String(), "\n")
 
 	return fmt.Sprintf("type %sModel struct {\n%s\n}", m.Name, fieldsStrTrim)
 }

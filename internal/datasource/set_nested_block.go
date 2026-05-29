@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"maps"
 
 	"github.com/hashicorp/terraform-plugin-codegen-spec/datasource"
 
@@ -204,13 +205,9 @@ func (g GeneratorSetNestedBlock) CustomTypeAndValue(name string, generated map[s
 
 	attributesBlocksAttrValues := make(map[string]string, len(g.NestedObject.Attributes)+len(g.NestedObject.Blocks))
 
-	for k, v := range attributeAttrValues {
-		attributesBlocksAttrValues[k] = v
-	}
+	maps.Copy(attributesBlocksAttrValues, attributeAttrValues)
 
-	for k, v := range blockAttrValues {
-		attributesBlocksAttrValues[k] = v
-	}
+	maps.Copy(attributesBlocksAttrValues, blockAttrValues)
 
 	objectType := schema.NewCustomNestedObjectType(name, attributesBlocksAttrValues)
 
@@ -236,13 +233,9 @@ func (g GeneratorSetNestedBlock) CustomTypeAndValue(name string, generated map[s
 
 	attributesBlocksTypes := make(map[string]string, len(g.NestedObject.Attributes)+len(g.NestedObject.Blocks))
 
-	for k, v := range attributeTypes {
-		attributesBlocksTypes[k] = v
-	}
+	maps.Copy(attributesBlocksTypes, attributeTypes)
 
-	for k, v := range blockTypes {
-		attributesBlocksTypes[k] = v
-	}
+	maps.Copy(attributesBlocksTypes, blockTypes)
 
 	attributeAttrTypes, err := g.NestedObject.Attributes.AttrTypes()
 
@@ -258,13 +251,9 @@ func (g GeneratorSetNestedBlock) CustomTypeAndValue(name string, generated map[s
 
 	attributesBlocksAttrTypes := make(map[string]string, len(g.NestedObject.Attributes)+len(g.NestedObject.Blocks))
 
-	for k, v := range attributeAttrTypes {
-		attributesBlocksAttrTypes[k] = v
-	}
+	maps.Copy(attributesBlocksAttrTypes, attributeAttrTypes)
 
-	for k, v := range blockAttrTypes {
-		attributesBlocksAttrTypes[k] = v
-	}
+	maps.Copy(attributesBlocksAttrTypes, blockAttrTypes)
 
 	// Only attributes need to be processed here as we're only concerned with List, Map, and Set.
 	attributeCollectionTypes, err := g.NestedObject.Attributes.CollectionTypes()

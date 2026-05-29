@@ -43,7 +43,7 @@ func (d DefaultCustom) Imports() *generatorschema.Imports {
 
 func (d DefaultCustom) Schema() []byte {
 	if d.custom != nil && d.custom.SchemaDefinition != "" {
-		return []byte(fmt.Sprintf("Default: %s,\n", d.custom.SchemaDefinition))
+		return fmt.Appendf(nil, "Default: %s,\n", d.custom.SchemaDefinition)
 	}
 
 	return nil

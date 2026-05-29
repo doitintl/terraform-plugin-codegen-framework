@@ -5,6 +5,7 @@ package schema
 
 import (
 	"regexp"
+	"slices"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -53,10 +54,8 @@ func (identifier FrameworkIdentifier) ToPrefixCamelCase(prefix string) string {
 
 	methodNames := identifier.methodNames()
 
-	for _, v := range methodNames {
-		if pascalCase == v {
-			return FrameworkIdentifier(prefix + pascalCase).ToCamelCase()
-		}
+	if slices.Contains(methodNames, pascalCase) {
+		return FrameworkIdentifier(prefix + pascalCase).ToCamelCase()
 	}
 
 	return FrameworkIdentifier(pascalCase).ToCamelCase()
@@ -82,10 +81,8 @@ func (identifier FrameworkIdentifier) ToPrefixPascalCase(prefix string) string {
 
 	methodNames := identifier.methodNames()
 
-	for _, v := range methodNames {
-		if pascalCase == v {
-			return FrameworkIdentifier(prefix).ToPascalCase() + pascalCase
-		}
+	if slices.Contains(methodNames, pascalCase) {
+		return FrameworkIdentifier(prefix).ToPascalCase() + pascalCase
 	}
 
 	return pascalCase

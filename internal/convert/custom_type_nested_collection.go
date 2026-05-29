@@ -52,7 +52,7 @@ func (c CustomTypeNestedCollection) Imports() *schema.Imports {
 
 func (c CustomTypeNestedCollection) Schema() []byte {
 	if c.customType != nil && c.customType.Type != "" {
-		return []byte(fmt.Sprintf("CustomType: %s,\n", c.customType.Type))
+		return fmt.Appendf(nil, "CustomType: %s,\n", c.customType.Type)
 	}
 
 	return nil
