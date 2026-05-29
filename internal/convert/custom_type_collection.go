@@ -99,7 +99,7 @@ func (c CustomTypeCollection) Schema() []byte {
 	}
 
 	if customType != "" {
-		return []byte(fmt.Sprintf("CustomType: %s,\n", customType))
+		return fmt.Appendf(nil, "CustomType: %s,\n", customType)
 	}
 
 	return nil

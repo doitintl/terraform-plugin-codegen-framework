@@ -68,7 +68,7 @@ func (c CustomTypeNestedObject) Schema() []byte {
 	}
 
 	if customTypeType != "" {
-		return []byte(fmt.Sprintf("CustomType: %s,\n", customTypeType))
+		return fmt.Appendf(nil, "CustomType: %s,\n", customTypeType)
 	}
 
 	return nil

@@ -58,11 +58,11 @@ func (d DefaultInt64) Schema() []byte {
 	}
 
 	if d.int64Default.Static != nil {
-		return []byte(fmt.Sprintf("Default: int64default.StaticInt64(%d),\n", *d.int64Default.Static))
+		return fmt.Appendf(nil, "Default: int64default.StaticInt64(%d),\n", *d.int64Default.Static)
 	}
 
 	if d.int64Default.Custom != nil && d.int64Default.Custom.SchemaDefinition != "" {
-		return []byte(fmt.Sprintf("Default: %s,\n", d.int64Default.Custom.SchemaDefinition))
+		return fmt.Appendf(nil, "Default: %s,\n", d.int64Default.Custom.SchemaDefinition)
 	}
 
 	return nil

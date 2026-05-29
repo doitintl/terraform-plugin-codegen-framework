@@ -40,7 +40,7 @@ func (d DeprecationMessage) Equal(other DeprecationMessage) bool {
 
 func (d DeprecationMessage) Schema() []byte {
 	if d.deprecationMessage != nil {
-		return []byte(fmt.Sprintf("DeprecationMessage: %s,\n", strconv.Quote(*d.deprecationMessage)))
+		return fmt.Appendf(nil, "DeprecationMessage: %s,\n", strconv.Quote(*d.deprecationMessage))
 	}
 
 	return nil

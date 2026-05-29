@@ -58,11 +58,11 @@ func (d DefaultBool) Schema() []byte {
 	}
 
 	if d.boolDefault.Static != nil {
-		return []byte(fmt.Sprintf("Default: booldefault.StaticBool(%t),\n", *d.boolDefault.Static))
+		return fmt.Appendf(nil, "Default: booldefault.StaticBool(%t),\n", *d.boolDefault.Static)
 	}
 
 	if d.boolDefault.Custom != nil && d.boolDefault.Custom.SchemaDefinition != "" {
-		return []byte(fmt.Sprintf("Default: %s,\n", d.boolDefault.Custom.SchemaDefinition))
+		return fmt.Appendf(nil, "Default: %s,\n", d.boolDefault.Custom.SchemaDefinition)
 	}
 
 	return nil

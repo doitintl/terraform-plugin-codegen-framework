@@ -157,5 +157,5 @@ func (e ElementType) Imports() *schema.Imports {
 }
 
 func (e ElementType) Schema() []byte {
-	return []byte(fmt.Sprintf("ElementType: %s,\n", string(e.ElementType())))
+	return fmt.Appendf(nil, "ElementType: %s,\n", string(e.ElementType()))
 }

@@ -58,11 +58,11 @@ func (d DefaultFloat64) Schema() []byte {
 	}
 
 	if d.float64Default.Static != nil {
-		return []byte(fmt.Sprintf("Default: float64default.StaticFloat64(%g),\n", *d.float64Default.Static))
+		return fmt.Appendf(nil, "Default: float64default.StaticFloat64(%g),\n", *d.float64Default.Static)
 	}
 
 	if d.float64Default.Custom != nil && d.float64Default.Custom.SchemaDefinition != "" {
-		return []byte(fmt.Sprintf("Default: %s,\n", d.float64Default.Custom.SchemaDefinition))
+		return fmt.Appendf(nil, "Default: %s,\n", d.float64Default.Custom.SchemaDefinition)
 	}
 
 	return nil

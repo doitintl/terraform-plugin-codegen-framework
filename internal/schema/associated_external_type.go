@@ -81,7 +81,7 @@ func (a *AssocExtType) Equal(other *AssocExtType) bool {
 func (a *AssocExtType) ToPascalCase() string {
 	inputSplit := strings.Split(a.TypeReference(), ".")
 
-	var ucName string
+	var ucName strings.Builder
 
 	for _, v := range inputSplit {
 		if len(v) < 1 {
@@ -92,14 +92,14 @@ func (a *AssocExtType) ToPascalCase() string {
 		ucFirstChar := strings.ToUpper(firstChar)
 
 		if len(v) < 2 {
-			ucName += ucFirstChar
+			ucName.WriteString(ucFirstChar)
 			continue
 		}
 
-		ucName += ucFirstChar + v[1:]
+		ucName.WriteString(ucFirstChar + v[1:])
 	}
 
-	return ucName
+	return ucName.String()
 }
 
 func (a *AssocExtType) ToCamelCase() string {
