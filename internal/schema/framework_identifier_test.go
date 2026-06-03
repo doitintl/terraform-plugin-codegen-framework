@@ -79,7 +79,7 @@ func TestFrameworkIdentifier_ToCamelCase(t *testing.T) {
 		},
 		"leading underscore": {
 			identifier: "_thing",
-			want:       "thing",
+			want:       "underscoreThing",
 		},
 		"middle underscore": {
 			identifier: "fake_thing",
@@ -120,7 +120,7 @@ func TestFrameworkIdentifier_ToPrefixCamelCase(t *testing.T) {
 		},
 		"leading underscore": {
 			identifier: "_thing",
-			want:       "thing",
+			want:       "underscoreThing",
 		},
 		"middle underscore": {
 			identifier: "fake_thing",
@@ -193,7 +193,7 @@ func TestFrameworkIdentifier_ToPascalCase(t *testing.T) {
 		},
 		"leading underscore": {
 			identifier: "_thing",
-			want:       "Thing",
+			want:       "UnderscoreThing",
 		},
 		"middle underscore": {
 			identifier: "fake_thing",
@@ -234,7 +234,7 @@ func TestFrameworkIdentifier_ToPrefixPascalCase(t *testing.T) {
 		},
 		"leading underscore": {
 			identifier: "_thing",
-			want:       "Thing",
+			want:       "UnderscoreThing",
 		},
 		"middle underscore": {
 			identifier: "fake_thing",
