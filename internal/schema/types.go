@@ -23,7 +23,23 @@ type Blocks interface {
 }
 
 type CustomTypeAndValue interface {
-	CustomTypeAndValue(name string, generated map[string]struct{}) ([]byte, error)
+	CustomTypeAndValue(name string, generated map[string][]byte) ([]byte, error)
+}
+
+// EffectiveTypeName is implemented by nested attribute/block generators that support
+// type name override for conflict resolution. When two nested attributes at different
+// nesting depths share the same name but have different schemas, one of them needs
+// a disambiguated name. This interface allows reading the resolved name.
+type EffectiveTypeName interface {
+	EffectiveTypeName() string
+}
+
+// TypeNameConflictResolver is implemented by nested attribute/block generators
+// that can have their type name changed for conflict resolution.
+type TypeNameConflictResolver interface {
+	// WithResolvedTypeName returns a copy of the generator with the type name
+	// updated. The returned value should be stored back into the GeneratorAttributes map.
+	WithResolvedTypeName(name string) GeneratorAttribute
 }
 
 type Elements interface {

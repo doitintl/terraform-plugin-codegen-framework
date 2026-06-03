@@ -43,6 +43,20 @@ func (identifier FrameworkIdentifier) ToCamelCase() string {
 	return string(unicode.ToLower(firstLetter)) + pascal[size:]
 }
 
+// ToSafeCamelCase returns the camel case identifier, but appends an underscore
+// if the result is a Go reserved keyword. Use this instead of ToCamelCase when
+// the result will be used as a standalone Go identifier (e.g., a variable name),
+// rather than concatenated with a suffix like "Val" or "Attribute".
+func (identifier FrameworkIdentifier) ToSafeCamelCase() string {
+	result := identifier.ToCamelCase()
+
+	if isGoKeyword(result) {
+		return result + "_"
+	}
+
+	return result
+}
+
 // ToPrefixCamelCase will return a camel case formatted string of the identifier,
 // prefixed with a camel-cased version of the supplied name if the identifier is
 // a generated custom value method name.
@@ -58,7 +72,7 @@ func (identifier FrameworkIdentifier) ToPrefixCamelCase(prefix string) string {
 		return FrameworkIdentifier(prefix + pascalCase).ToCamelCase()
 	}
 
-	return FrameworkIdentifier(pascalCase).ToCamelCase()
+	return FrameworkIdentifier(pascalCase).ToSafeCamelCase()
 }
 
 // ToPascalCase will return a pascal case formatted string of the identifier.
@@ -108,4 +122,18 @@ func (identifier FrameworkIdentifier) methodNames() []string {
 		"ToTerraformValue",
 		"Type",
 	}
+}
+
+// goKeywords contains all Go reserved keywords that cannot be used as identifiers.
+var goKeywords = map[string]bool{
+	"break": true, "case": true, "chan": true, "const": true, "continue": true,
+	"default": true, "defer": true, "else": true, "fallthrough": true, "for": true,
+	"func": true, "go": true, "goto": true, "if": true, "import": true,
+	"interface": true, "map": true, "package": true, "range": true, "return": true,
+	"select": true, "struct": true, "switch": true, "type": true, "var": true,
+}
+
+// isGoKeyword returns true if the given string is a Go reserved keyword.
+func isGoKeyword(s string) bool {
+	return goKeywords[s]
 }

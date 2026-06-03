@@ -63,6 +63,15 @@ func (g GeneratorAttributes) AttrTypes() (map[string]string, error) {
 	for _, k := range attributeKeys {
 		name := FrameworkIdentifier(k)
 
+		// Use the effective type name if the attribute was renamed
+		// during conflict resolution.
+		effName := name
+		if t, ok := g[k].(EffectiveTypeName); ok {
+			if tn := t.EffectiveTypeName(); tn != "" {
+				effName = FrameworkIdentifier(tn)
+			}
+		}
+
 		if a, ok := g[k].(AttrType); ok {
 			attrType, err := a.AttrType(name)
 
@@ -77,13 +86,13 @@ func (g GeneratorAttributes) AttrTypes() (map[string]string, error) {
 
 		switch g[k].GeneratorSchemaType() {
 		case GeneratorListNestedAttribute:
-			attrTypes[k] = fmt.Sprintf("basetypes.ListType{\nElemType: %sValue{}.Type(ctx),\n}", name.ToPascalCase())
+			attrTypes[k] = fmt.Sprintf("basetypes.ListType{\nElemType: %sValue{}.Type(ctx),\n}", effName.ToPascalCase())
 		case GeneratorMapNestedAttribute:
-			attrTypes[k] = fmt.Sprintf("basetypes.MapType{\nElemType: %sValue{}.Type(ctx),\n}", name.ToPascalCase())
+			attrTypes[k] = fmt.Sprintf("basetypes.MapType{\nElemType: %sValue{}.Type(ctx),\n}", effName.ToPascalCase())
 		case GeneratorSetNestedAttribute:
-			attrTypes[k] = fmt.Sprintf("basetypes.SetType{\nElemType: %sValue{}.Type(ctx),\n}", name.ToPascalCase())
+			attrTypes[k] = fmt.Sprintf("basetypes.SetType{\nElemType: %sValue{}.Type(ctx),\n}", effName.ToPascalCase())
 		case GeneratorSingleNestedAttribute:
-			attrTypes[k] = fmt.Sprintf("%sType{\nbasetypes.ObjectType{\nAttrTypes: %sValue{}.AttributeTypes(ctx),\n},\n}", name.ToPascalCase(), name.ToPascalCase())
+			attrTypes[k] = fmt.Sprintf("%sType{\nbasetypes.ObjectType{\nAttrTypes: %sValue{}.AttributeTypes(ctx),\n},\n}", effName.ToPascalCase(), effName.ToPascalCase())
 		}
 	}
 
@@ -103,6 +112,15 @@ func (g GeneratorAttributes) AttrValues() (map[string]string, error) {
 			continue
 		}
 
+		// Use the effective type name if the attribute was renamed
+		// during conflict resolution.
+		effName := FrameworkIdentifier(k)
+		if t, ok := g[k].(EffectiveTypeName); ok {
+			if tn := t.EffectiveTypeName(); tn != "" {
+				effName = FrameworkIdentifier(tn)
+			}
+		}
+
 		switch g[k].GeneratorSchemaType() {
 		case GeneratorListNestedAttribute:
 			attrValues[k] = "basetypes.ListValue"
@@ -111,7 +129,7 @@ func (g GeneratorAttributes) AttrValues() (map[string]string, error) {
 		case GeneratorSetNestedAttribute:
 			attrValues[k] = "basetypes.SetValue"
 		case GeneratorSingleNestedAttribute:
-			attrValues[k] = fmt.Sprintf("%sValue", FrameworkIdentifier(k).ToPascalCase())
+			attrValues[k] = fmt.Sprintf("%sValue", effName.ToPascalCase())
 		}
 	}
 

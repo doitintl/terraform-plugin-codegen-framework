@@ -91,3 +91,15 @@ func (n NestedBlockObject) Schema() ([]byte, error) {
 
 	return b.Bytes(), nil
 }
+
+// TypeName returns the effective type name used for generating custom Type/Value types.
+func (n NestedBlockObject) TypeName() string {
+	return n.customType.TypeName()
+}
+
+// WithTypeName returns a copy of the NestedBlockObject with the type name
+// updated to the given name.
+func (n NestedBlockObject) WithTypeName(name string) NestedBlockObject {
+	n.customType = n.customType.WithTypeName(name)
+	return n
+}

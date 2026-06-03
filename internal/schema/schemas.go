@@ -19,6 +19,13 @@ type GeneratorSchemas struct {
 }
 
 func NewGeneratorSchemas(schemas map[string]GeneratorSchema) GeneratorSchemas {
+	// Resolve type name conflicts for each schema before any generation.
+	// This ensures Schema() and CustomTypeValueBytes() use consistent names.
+	for k, s := range schemas {
+		s.ResolveTypeNameConflicts()
+		schemas[k] = s
+	}
+
 	return GeneratorSchemas{
 		schemas: schemas,
 	}
@@ -66,7 +73,9 @@ func (g GeneratorSchemas) Models() (map[string][]byte, error) {
 		}
 
 		for _, m := range models {
-			buf.WriteString("\n" + m.String() + "\n")
+			buf.WriteString("\n")
+			buf.WriteString(m.String())
+			buf.WriteString("\n")
 		}
 
 		modelsBytes[name] = buf.Bytes()

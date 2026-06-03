@@ -81,3 +81,16 @@ func (c CustomTypeNestedObject) ValueType() string {
 
 	return ""
 }
+
+// TypeName returns the name used for generating the custom type.
+func (c CustomTypeNestedObject) TypeName() string {
+	return c.name
+}
+
+// WithTypeName returns a copy of the CustomTypeNestedObject with the given name.
+// This is used for resolving type name conflicts when the same attribute name
+// appears at different nesting levels with different schemas.
+func (c CustomTypeNestedObject) WithTypeName(name string) CustomTypeNestedObject {
+	c.name = name
+	return c
+}
