@@ -80,3 +80,14 @@ func (n NestedAttributeObject) Schema() ([]byte, error) {
 
 	return b.Bytes(), nil
 }
+
+// TypeName returns the effective type name used for generating custom Type/Value types.
+func (n NestedAttributeObject) TypeName() string {
+	return n.customType.TypeName()
+}
+
+// WithTypeName returns a copy of the NestedAttributeObject with the type name updated.
+func (n NestedAttributeObject) WithTypeName(name string) NestedAttributeObject {
+	n.customType = n.customType.WithTypeName(name)
+	return n
+}

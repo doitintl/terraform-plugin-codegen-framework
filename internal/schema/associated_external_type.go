@@ -96,7 +96,8 @@ func (a *AssocExtType) ToPascalCase() string {
 			continue
 		}
 
-		ucName.WriteString(ucFirstChar + v[1:])
+		ucName.WriteString(ucFirstChar)
+		ucName.WriteString(v[1:])
 	}
 
 	return ucName.String()

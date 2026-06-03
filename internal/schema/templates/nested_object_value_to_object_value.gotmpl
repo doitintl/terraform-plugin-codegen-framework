@@ -11,10 +11,10 @@ var {{$key.ToPrefixCamelCase $.Name}} attr.Value
 }
 {{else if eq $value "SingleNested"}}
 
-var {{$key.ToCamelCase}} attr.Value
+var {{$key.ToPrefixCamelCase $.Name}} attr.Value
 
 {
-	{{$key.ToCamelCase}} = v.{{$key.ToPascalCase}}
+	{{$key.ToPrefixCamelCase $.Name}} = v.{{$key.ToPrefixPascalCase $.Name}}
 }
 {{end}}
 {{- end}}

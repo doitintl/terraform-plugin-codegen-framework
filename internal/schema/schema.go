@@ -213,6 +213,15 @@ func (g GeneratorSchema) Models(name string) ([]model.Model, error) {
 			return nil, err
 		}
 
+		// If the attribute's type name was changed by conflict resolution,
+		// update the model field's ValueType to match the resolved name.
+		// The Go field name and tfsdk tag must keep the original attribute name.
+		if t, ok := g.Attributes[k].(EffectiveTypeName); ok {
+			if tn := t.EffectiveTypeName(); tn != "" && tn != k {
+				modelField.ValueType = FrameworkIdentifier(tn).ToPascalCase() + "Value"
+			}
+		}
+
 		modelFields = append(modelFields, modelField)
 	}
 
@@ -242,12 +251,172 @@ func (g GeneratorSchema) Models(name string) ([]model.Model, error) {
 	return models, nil
 }
 
+// typeFingerprint represents a collected type's schema fingerprint at a specific nesting depth.
+type typeFingerprint struct {
+	fingerprint string
+	depth       int
+	parentName  string
+	// attrPath tracks the path of attribute keys to reach this type in the tree
+	attrPath []string
+}
+
+// ResolveTypeNameConflicts walks all nested attributes and blocks recursively,
+// detecting name conflicts where the same attribute name appears at different
+// nesting levels with different schemas. When a conflict is found, the deeper
+// attribute gets its type name prefixed with the parent name to disambiguate.
+//
+// This method mutates the GeneratorSchema's Attributes map in place and must be
+// called before Schema() and CustomTypeValueBytes().
+func (g *GeneratorSchema) ResolveTypeNameConflicts() {
+	// Collect all type fingerprints
+	fingerprints := make(map[string][]typeFingerprint)
+	collectFingerprints(g.Attributes, fingerprints, 0, "", nil)
+	collectBlockFingerprints(g.Blocks, fingerprints, 0, "", nil)
+
+	// Find conflicts: same name, different fingerprints
+	for name, fps := range fingerprints {
+		if len(fps) <= 1 {
+			continue
+		}
+
+		// Check if all fingerprints are the same (same schema, just shared)
+		allSame := true
+		for i := 1; i < len(fps); i++ {
+			if fps[i].fingerprint != fps[0].fingerprint {
+				allSame = false
+				break
+			}
+		}
+
+		if allSame {
+			continue // No conflict: all types with this name have the same schema
+		}
+
+		// Conflict detected: disambiguate the deeper ones by prefixing with parent name.
+		// The shallowest occurrence keeps the bare name.
+		minDepth := fps[0].depth
+		for _, fp := range fps[1:] {
+			if fp.depth < minDepth {
+				minDepth = fp.depth
+			}
+		}
+
+		for _, fp := range fps {
+			if fp.depth == minDepth {
+				continue // Keep the shallowest occurrence with the bare name
+			}
+
+			// Prefix with parent name to disambiguate
+			newName := fp.parentName + "_" + name
+			resolveAtPath(g.Attributes, fp.attrPath, newName)
+		}
+	}
+}
+
+// collectFingerprints recursively walks attributes and collects type fingerprints.
+func collectFingerprints(attrs GeneratorAttributes, fps map[string][]typeFingerprint, depth int, parentName string, path []string) {
+	for _, k := range attrs.SortedKeys() {
+		attr := attrs[k]
+		if attr == nil {
+			continue
+		}
+
+		currentPath := append(append([]string{}, path...), k)
+
+		// Check if this attribute has nested attributes (implements Attributes interface)
+		if nested, ok := attr.(Attributes); ok {
+			// Compute fingerprint from the nested attributes' sorted keys
+			nestedAttrs := nested.GetAttributes()
+			fp := computeAttrFingerprint(nestedAttrs)
+
+			fps[k] = append(fps[k], typeFingerprint{
+				fingerprint: fp,
+				depth:       depth,
+				parentName:  parentName,
+				attrPath:    currentPath,
+			})
+
+			// Recurse into nested attributes
+			collectFingerprints(nestedAttrs, fps, depth+1, k, currentPath)
+		}
+	}
+}
+
+// collectBlockFingerprints recursively walks blocks and collects type fingerprints.
+func collectBlockFingerprints(blocks GeneratorBlocks, fps map[string][]typeFingerprint, depth int, parentName string, path []string) {
+	for _, k := range blocks.SortedKeys() {
+		block := blocks[k]
+		if block == nil {
+			continue
+		}
+
+		currentPath := append(append([]string{}, path...), k)
+
+		if nested, ok := block.(Attributes); ok {
+			nestedAttrs := nested.GetAttributes()
+			fp := computeAttrFingerprint(nestedAttrs)
+
+			fps[k] = append(fps[k], typeFingerprint{
+				fingerprint: fp,
+				depth:       depth,
+				parentName:  parentName,
+				attrPath:    currentPath,
+			})
+
+			collectFingerprints(nestedAttrs, fps, depth+1, k, currentPath)
+		}
+
+		if nested, ok := block.(Blocks); ok {
+			nestedBlocks := nested.GetBlocks()
+			collectBlockFingerprints(nestedBlocks, fps, depth+1, k, currentPath)
+		}
+	}
+}
+
+// computeAttrFingerprint computes a string fingerprint from a GeneratorAttributes map.
+// Two attributes with the same fingerprint have the same schema structure at depth 1.
+func computeAttrFingerprint(attrs GeneratorAttributes) string {
+	keys := attrs.SortedKeys()
+	var parts []string
+	for _, k := range keys {
+		a := attrs[k]
+		if a == nil {
+			continue
+		}
+		parts = append(parts, fmt.Sprintf("%s:%T", k, a))
+	}
+	return strings.Join(parts, ",")
+}
+
+// resolveAtPath walks the attribute tree following the given path and renames the
+// type at the leaf. The path is a sequence of attribute keys from the root.
+func resolveAtPath(attrs GeneratorAttributes, path []string, newName string) {
+	if len(path) == 0 {
+		return
+	}
+
+	if len(path) == 1 {
+		// Leaf: rename this attribute's type
+		attr := attrs[path[0]]
+		if resolver, ok := attr.(TypeNameConflictResolver); ok {
+			attrs[path[0]] = resolver.WithResolvedTypeName(newName)
+		}
+		return
+	}
+
+	// Intermediate: recurse into nested attributes
+	attr := attrs[path[0]]
+	if nested, ok := attr.(Attributes); ok {
+		resolveAtPath(nested.GetAttributes(), path[1:], newName)
+	}
+}
+
 // CustomTypeValueBytes iterates over all the attributes and blocks to generate code
 // for custom type and value types for use in the schema and data models.
 func (g GeneratorSchema) CustomTypeValueBytes() ([]byte, error) {
 	var buf bytes.Buffer
 
-	generated := make(map[string]struct{})
+	generated := make(map[string][]byte)
 
 	attributeKeys := g.Attributes.SortedKeys()
 
@@ -257,7 +426,16 @@ func (g GeneratorSchema) CustomTypeValueBytes() ([]byte, error) {
 		}
 
 		if c, ok := g.Attributes[k].(CustomTypeAndValue); ok {
-			b, err := c.CustomTypeAndValue(k, generated)
+			// Use the effective type name if available (may have been
+			// changed by ResolveTypeNameConflicts).
+			effectiveName := k
+			if t, ok := g.Attributes[k].(EffectiveTypeName); ok {
+				if tn := t.EffectiveTypeName(); tn != "" {
+					effectiveName = tn
+				}
+			}
+
+			b, err := c.CustomTypeAndValue(effectiveName, generated)
 
 			if err != nil {
 				return nil, err
@@ -275,7 +453,14 @@ func (g GeneratorSchema) CustomTypeValueBytes() ([]byte, error) {
 		}
 
 		if c, ok := g.Blocks[k].(CustomTypeAndValue); ok {
-			b, err := c.CustomTypeAndValue(k, generated)
+			effectiveName := k
+			if t, ok := g.Blocks[k].(EffectiveTypeName); ok {
+				if tn := t.EffectiveTypeName(); tn != "" {
+					effectiveName = tn
+				}
+			}
+
+			b, err := c.CustomTypeAndValue(effectiveName, generated)
 
 			if err != nil {
 				return nil, err
