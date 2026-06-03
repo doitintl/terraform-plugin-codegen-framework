@@ -78,10 +78,20 @@ func (identifier FrameworkIdentifier) ToPrefixCamelCase(prefix string) string {
 // ToPascalCase will return a pascal case formatted string of the identifier.
 // Example:
 //   - example_resource_thing -> ExampleResourceThing
+//   - _id -> UnderscoreId
 func (identifier FrameworkIdentifier) ToPascalCase() string {
-	return snakeLetters.ReplaceAllStringFunc(string(identifier), func(s string) string {
+	input := string(identifier)
+
+	result := snakeLetters.ReplaceAllStringFunc(input, func(s string) string {
 		return strings.ToUpper(strings.Replace(s, "_", "", -1))
 	})
+
+	// Preserve leading underscore to avoid collisions (e.g., _id vs id).
+	if strings.HasPrefix(input, "_") {
+		result = "Underscore" + result
+	}
+
+	return result
 }
 
 // ToPrefixPascalCase will return a pascal case formatted string of the identifier,
