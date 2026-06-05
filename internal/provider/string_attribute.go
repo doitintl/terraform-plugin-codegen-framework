@@ -187,6 +187,10 @@ func (g GeneratorStringAttribute) ToFromFunctions(name string) ([]byte, error) {
 
 // AttrType returns a string representation of a basetypes.StringTypable type.
 func (g GeneratorStringAttribute) AttrType(name schema.FrameworkIdentifier) (string, error) {
+	if ct := g.CustomType.TypeString(); ct != "" {
+		return ct, nil
+	}
+
 	if g.AssociatedExternalType != nil {
 		return fmt.Sprintf("%sType{}", name.ToPascalCase()), nil
 	}
@@ -196,6 +200,10 @@ func (g GeneratorStringAttribute) AttrType(name schema.FrameworkIdentifier) (str
 
 // AttrValue returns a string representation of a basetypes.StringValuable type.
 func (g GeneratorStringAttribute) AttrValue(name schema.FrameworkIdentifier) string {
+	if cv := g.CustomType.ValueType(); cv != "" {
+		return cv
+	}
+
 	if g.AssociatedExternalType != nil {
 		return fmt.Sprintf("%sValue", name.ToPascalCase())
 	}

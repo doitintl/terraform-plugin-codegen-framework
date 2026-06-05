@@ -14,6 +14,7 @@ import (
 
 	"github.com/doitintl/terraform-plugin-codegen-framework/internal/convert"
 	"github.com/doitintl/terraform-plugin-codegen-framework/internal/model"
+	"github.com/doitintl/terraform-plugin-codegen-framework/internal/schema"
 )
 
 func TestGeneratorStringAttribute_New(t *testing.T) {
@@ -406,3 +407,128 @@ func TestGeneratorStringAttribute_ModelField(t *testing.T) {
 		})
 	}
 }
+
+func TestGeneratorStringAttribute_AttrType(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		input    GeneratorStringAttribute
+		expected string
+	}{
+		"default": {
+			expected: "basetypes.StringType{}",
+		},
+		"custom-type": {
+			input: GeneratorStringAttribute{
+				CustomType: convert.NewCustomTypePrimitive(
+					&specschema.CustomType{
+						Type:      "jsontypes.NormalizedType{}",
+						ValueType: "jsontypes.Normalized",
+					},
+					nil,
+					"string_attribute",
+				),
+			},
+			expected: "jsontypes.NormalizedType{}",
+		},
+		"associated-external-type": {
+			input: GeneratorStringAttribute{
+				AssociatedExternalType: &schema.AssocExtType{},
+			},
+			expected: "StringAttributeType{}",
+		},
+		"custom-type-overriding-associated-external-type": {
+			input: GeneratorStringAttribute{
+				CustomType: convert.NewCustomTypePrimitive(
+					&specschema.CustomType{
+						Type:      "jsontypes.NormalizedType{}",
+						ValueType: "jsontypes.Normalized",
+					},
+					&specschema.AssociatedExternalType{
+						Type: "*api.ExtString",
+					},
+					"string_attribute",
+				),
+				AssociatedExternalType: &schema.AssocExtType{},
+			},
+			expected: "jsontypes.NormalizedType{}",
+		},
+	}
+
+	for name, testCase := range testCases {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got, err := testCase.input.AttrType("string_attribute")
+
+			if err != nil {
+				t.Errorf("unexpected error: %s", err)
+			}
+
+			if diff := cmp.Diff(got, testCase.expected); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
+
+func TestGeneratorStringAttribute_AttrValue(t *testing.T) {
+	t.Parallel()
+
+	testCases := map[string]struct {
+		input    GeneratorStringAttribute
+		expected string
+	}{
+		"default": {
+			expected: "basetypes.StringValue",
+		},
+		"custom-type": {
+			input: GeneratorStringAttribute{
+				CustomType: convert.NewCustomTypePrimitive(
+					&specschema.CustomType{
+						Type:      "jsontypes.NormalizedType{}",
+						ValueType: "jsontypes.Normalized",
+					},
+					nil,
+					"string_attribute",
+				),
+			},
+			expected: "jsontypes.Normalized",
+		},
+		"associated-external-type": {
+			input: GeneratorStringAttribute{
+				AssociatedExternalType: &schema.AssocExtType{},
+			},
+			expected: "StringAttributeValue",
+		},
+		"custom-type-overriding-associated-external-type": {
+			input: GeneratorStringAttribute{
+				CustomType: convert.NewCustomTypePrimitive(
+					&specschema.CustomType{
+						Type:      "jsontypes.NormalizedType{}",
+						ValueType: "jsontypes.Normalized",
+					},
+					&specschema.AssociatedExternalType{
+						Type: "*api.ExtString",
+					},
+					"string_attribute",
+				),
+				AssociatedExternalType: &schema.AssocExtType{},
+			},
+			expected: "jsontypes.Normalized",
+		},
+	}
+
+	for name, testCase := range testCases {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			got := testCase.input.AttrValue("string_attribute")
+
+			if diff := cmp.Diff(got, testCase.expected); diff != "" {
+				t.Errorf("unexpected difference: %s", diff)
+			}
+		})
+	}
+}
+
