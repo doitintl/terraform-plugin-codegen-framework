@@ -91,3 +91,13 @@ func (c CustomTypePrimitive) ValueType() string {
 
 	return ""
 }
+
+// TypeString returns the custom type string (e.g., "jsontypes.NormalizedType{}")
+// when a custom type is specified. Returns empty string otherwise.
+func (c CustomTypePrimitive) TypeString() string {
+	if c.customType != nil {
+		return c.customType.Type
+	}
+
+	return ""
+}
