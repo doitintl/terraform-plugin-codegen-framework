@@ -437,6 +437,22 @@ func TestGeneratorStringAttribute_AttrType(t *testing.T) {
 			},
 			expected: "StringAttributeType{}",
 		},
+		"custom-type-overriding-associated-external-type": {
+			input: GeneratorStringAttribute{
+				CustomType: convert.NewCustomTypePrimitive(
+					&specschema.CustomType{
+						Type:      "jsontypes.NormalizedType{}",
+						ValueType: "jsontypes.Normalized",
+					},
+					&specschema.AssociatedExternalType{
+						Type: "*api.ExtString",
+					},
+					"string_attribute",
+				),
+				AssociatedExternalType: &schema.AssocExtType{},
+			},
+			expected: "jsontypes.NormalizedType{}",
+		},
 	}
 
 	for name, testCase := range testCases {
@@ -484,6 +500,22 @@ func TestGeneratorStringAttribute_AttrValue(t *testing.T) {
 				AssociatedExternalType: &schema.AssocExtType{},
 			},
 			expected: "StringAttributeValue",
+		},
+		"custom-type-overriding-associated-external-type": {
+			input: GeneratorStringAttribute{
+				CustomType: convert.NewCustomTypePrimitive(
+					&specschema.CustomType{
+						Type:      "jsontypes.NormalizedType{}",
+						ValueType: "jsontypes.Normalized",
+					},
+					&specschema.AssociatedExternalType{
+						Type: "*api.ExtString",
+					},
+					"string_attribute",
+				),
+				AssociatedExternalType: &schema.AssocExtType{},
+			},
+			expected: "jsontypes.Normalized",
 		},
 	}
 
