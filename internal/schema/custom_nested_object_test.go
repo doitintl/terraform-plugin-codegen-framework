@@ -381,6 +381,14 @@ func TestCustomNestedObjectType_renderValueFromObject(t *testing.T) {
 func (t ExampleType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 var diags diag.Diagnostics
 
+if in.IsNull() {
+return NewExampleValueNull(), diags
+}
+
+if in.IsUnknown() {
+return NewExampleValueUnknown(), diags
+}
+
 attributes := in.Attributes()
 
 
@@ -422,6 +430,14 @@ state: attr.ValueStateKnown,
 func (t ExampleType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 var diags diag.Diagnostics
 
+if in.IsNull() {
+return NewExampleValueNull(), diags
+}
+
+if in.IsUnknown() {
+return NewExampleValueUnknown(), diags
+}
+
 attributes := in.Attributes()
 
 
@@ -459,6 +475,14 @@ state: attr.ValueStateKnown,
 			expected: []byte(`
 func (t ExampleType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 var diags diag.Diagnostics
+
+if in.IsNull() {
+return NewExampleValueNull(), diags
+}
+
+if in.IsUnknown() {
+return NewExampleValueUnknown(), diags
+}
 
 
 

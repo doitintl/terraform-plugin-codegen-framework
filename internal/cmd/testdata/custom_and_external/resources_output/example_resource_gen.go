@@ -263,6 +263,14 @@ func (t ListNestedAttributeAssocExtTypeType) String() string {
 func (t ListNestedAttributeAssocExtTypeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewListNestedAttributeAssocExtTypeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewListNestedAttributeAssocExtTypeValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	boolAttributeAttribute, ok := attributes["bool_attribute"]
@@ -806,6 +814,14 @@ func (t MapNestedAttributeAssocExtTypeType) String() string {
 
 func (t MapNestedAttributeAssocExtTypeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if in.IsNull() {
+		return NewMapNestedAttributeAssocExtTypeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewMapNestedAttributeAssocExtTypeValueUnknown(), diags
+	}
 
 	attributes := in.Attributes()
 
@@ -1351,6 +1367,14 @@ func (t SetNestedAttributeAssocExtTypeType) String() string {
 func (t SetNestedAttributeAssocExtTypeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewSetNestedAttributeAssocExtTypeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSetNestedAttributeAssocExtTypeValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	boolAttributeAttribute, ok := attributes["bool_attribute"]
@@ -1894,6 +1918,14 @@ func (t SingleNestedAttributeAssocExtTypeType) String() string {
 
 func (t SingleNestedAttributeAssocExtTypeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if in.IsNull() {
+		return NewSingleNestedAttributeAssocExtTypeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSingleNestedAttributeAssocExtTypeValueUnknown(), diags
+	}
 
 	attributes := in.Attributes()
 
@@ -2439,6 +2471,14 @@ func (t ListNestedBlockAssocExtTypeType) String() string {
 func (t ListNestedBlockAssocExtTypeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewListNestedBlockAssocExtTypeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewListNestedBlockAssocExtTypeValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	boolAttributeAttribute, ok := attributes["bool_attribute"]
@@ -2983,6 +3023,14 @@ func (t SetNestedBlockAssocExtTypeType) String() string {
 func (t SetNestedBlockAssocExtTypeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewSetNestedBlockAssocExtTypeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSetNestedBlockAssocExtTypeValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	boolAttributeAttribute, ok := attributes["bool_attribute"]
@@ -3526,6 +3574,14 @@ func (t SingleNestedBlockAssocExtTypeType) String() string {
 
 func (t SingleNestedBlockAssocExtTypeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if in.IsNull() {
+		return NewSingleNestedBlockAssocExtTypeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSingleNestedBlockAssocExtTypeValueUnknown(), diags
+	}
 
 	attributes := in.Attributes()
 
