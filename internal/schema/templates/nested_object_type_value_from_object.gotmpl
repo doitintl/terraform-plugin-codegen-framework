@@ -2,6 +2,14 @@
 func (t {{.Name}}Type) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 var diags diag.Diagnostics
 
+if in.IsNull() {
+return New{{.Name}}ValueNull(), diags
+}
+
+if in.IsUnknown() {
+return New{{.Name}}ValueUnknown(), diags
+}
+
 {{- if .AttrValues}}
 
 attributes := in.Attributes()

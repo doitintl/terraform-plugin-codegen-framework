@@ -624,6 +624,14 @@ func (t ListNestedAttributeAssocExtTypeType) String() string {
 func (t ListNestedAttributeAssocExtTypeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewListNestedAttributeAssocExtTypeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewListNestedAttributeAssocExtTypeValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	boolAttributeAttribute, ok := attributes["bool_attribute"]
@@ -1168,6 +1176,14 @@ func (t ListNestedAttributeOneType) String() string {
 func (t ListNestedAttributeOneType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewListNestedAttributeOneValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewListNestedAttributeOneValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	boolAttributeAttribute, ok := attributes["bool_attribute"]
@@ -1491,6 +1507,14 @@ func (t ListNestedAttributeThreeType) String() string {
 
 func (t ListNestedAttributeThreeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if in.IsNull() {
+		return NewListNestedAttributeThreeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewListNestedAttributeThreeValueUnknown(), diags
+	}
 
 	attributes := in.Attributes()
 
@@ -1827,6 +1851,14 @@ func (t ListNestedAttributeThreeListNestedAttributeOneType) String() string {
 
 func (t ListNestedAttributeThreeListNestedAttributeOneType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if in.IsNull() {
+		return NewListNestedAttributeThreeListNestedAttributeOneValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewListNestedAttributeThreeListNestedAttributeOneValueUnknown(), diags
+	}
 
 	attributes := in.Attributes()
 
@@ -2265,6 +2297,14 @@ func (t ListNestedAttributeTwoType) String() string {
 func (t ListNestedAttributeTwoType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewListNestedAttributeTwoValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewListNestedAttributeTwoValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	listNestedAttributeTwoListNestedAttributeOneAttribute, ok := attributes["list_nested_attribute_two_list_nested_attribute_one"]
@@ -2601,6 +2641,14 @@ func (t ListNestedAttributeTwoListNestedAttributeOneType) String() string {
 func (t ListNestedAttributeTwoListNestedAttributeOneType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewListNestedAttributeTwoListNestedAttributeOneValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewListNestedAttributeTwoListNestedAttributeOneValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	boolAttributeAttribute, ok := attributes["bool_attribute"]
@@ -2924,6 +2972,14 @@ func (t MapNestedAttributeAssocExtTypeType) String() string {
 
 func (t MapNestedAttributeAssocExtTypeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if in.IsNull() {
+		return NewMapNestedAttributeAssocExtTypeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewMapNestedAttributeAssocExtTypeValueUnknown(), diags
+	}
 
 	attributes := in.Attributes()
 
@@ -3469,6 +3525,14 @@ func (t SetNestedAttributeAssocExtTypeType) String() string {
 func (t SetNestedAttributeAssocExtTypeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewSetNestedAttributeAssocExtTypeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSetNestedAttributeAssocExtTypeValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	boolAttributeAttribute, ok := attributes["bool_attribute"]
@@ -4012,6 +4076,14 @@ func (t SingleNestedAttributeAssocExtTypeType) String() string {
 
 func (t SingleNestedAttributeAssocExtTypeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if in.IsNull() {
+		return NewSingleNestedAttributeAssocExtTypeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSingleNestedAttributeAssocExtTypeValueUnknown(), diags
+	}
 
 	attributes := in.Attributes()
 
@@ -4557,6 +4629,14 @@ func (t SingleNestedAttributeOneType) String() string {
 func (t SingleNestedAttributeOneType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewSingleNestedAttributeOneValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSingleNestedAttributeOneValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	boolAttributeAttribute, ok := attributes["bool_attribute"]
@@ -4880,6 +4960,14 @@ func (t SingleNestedAttributeThreeType) String() string {
 
 func (t SingleNestedAttributeThreeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if in.IsNull() {
+		return NewSingleNestedAttributeThreeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSingleNestedAttributeThreeValueUnknown(), diags
+	}
 
 	attributes := in.Attributes()
 
@@ -5222,6 +5310,14 @@ func (t SingleNestedAttributeThreeSingleNestedAttributeOneType) String() string 
 
 func (t SingleNestedAttributeThreeSingleNestedAttributeOneType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if in.IsNull() {
+		return NewSingleNestedAttributeThreeSingleNestedAttributeOneValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSingleNestedAttributeThreeSingleNestedAttributeOneValueUnknown(), diags
+	}
 
 	attributes := in.Attributes()
 
@@ -5573,6 +5669,14 @@ func (t SingleNestedAttributeTwoType) String() string {
 func (t SingleNestedAttributeTwoType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewSingleNestedAttributeTwoValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSingleNestedAttributeTwoValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	singleNestedAttributeTwoSingleNestedAttributeOneAttribute, ok := attributes["single_nested_attribute_two_single_nested_attribute_one"]
@@ -5915,6 +6019,14 @@ func (t SingleNestedAttributeTwoSingleNestedAttributeOneType) String() string {
 func (t SingleNestedAttributeTwoSingleNestedAttributeOneType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewSingleNestedAttributeTwoSingleNestedAttributeOneValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSingleNestedAttributeTwoSingleNestedAttributeOneValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	boolAttributeAttribute, ok := attributes["bool_attribute"]
@@ -6238,6 +6350,14 @@ func (t ListNestedBlockAssocExtTypeType) String() string {
 
 func (t ListNestedBlockAssocExtTypeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if in.IsNull() {
+		return NewListNestedBlockAssocExtTypeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewListNestedBlockAssocExtTypeValueUnknown(), diags
+	}
 
 	attributes := in.Attributes()
 
@@ -6783,6 +6903,14 @@ func (t ListNestedBlockOneType) String() string {
 func (t ListNestedBlockOneType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewListNestedBlockOneValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewListNestedBlockOneValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	boolAttributeAttribute, ok := attributes["bool_attribute"]
@@ -7106,6 +7234,14 @@ func (t ListNestedBlockThreeType) String() string {
 
 func (t ListNestedBlockThreeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if in.IsNull() {
+		return NewListNestedBlockThreeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewListNestedBlockThreeValueUnknown(), diags
+	}
 
 	attributes := in.Attributes()
 
@@ -7523,6 +7659,14 @@ func (t ListNestedBlockThreeListNestedBlockOneType) String() string {
 func (t ListNestedBlockThreeListNestedBlockOneType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewListNestedBlockThreeListNestedBlockOneValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewListNestedBlockThreeListNestedBlockOneValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	listAttributeAttribute, ok := attributes["list_attribute"]
@@ -7873,6 +8017,14 @@ func (t ListNestedBlockTwoType) String() string {
 func (t ListNestedBlockTwoType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewListNestedBlockTwoValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewListNestedBlockTwoValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	listNestedBlockTwoListNestedBlockOneAttribute, ok := attributes["list_nested_block_two_list_nested_block_one"]
@@ -8209,6 +8361,14 @@ func (t ListNestedBlockTwoListNestedBlockOneType) String() string {
 func (t ListNestedBlockTwoListNestedBlockOneType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewListNestedBlockTwoListNestedBlockOneValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewListNestedBlockTwoListNestedBlockOneValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	boolAttributeAttribute, ok := attributes["bool_attribute"]
@@ -8532,6 +8692,14 @@ func (t SetNestedBlockAssocExtTypeType) String() string {
 
 func (t SetNestedBlockAssocExtTypeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if in.IsNull() {
+		return NewSetNestedBlockAssocExtTypeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSetNestedBlockAssocExtTypeValueUnknown(), diags
+	}
 
 	attributes := in.Attributes()
 
@@ -9077,6 +9245,14 @@ func (t SingleNestedBlockAssocExtTypeType) String() string {
 func (t SingleNestedBlockAssocExtTypeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewSingleNestedBlockAssocExtTypeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSingleNestedBlockAssocExtTypeValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	boolAttributeAttribute, ok := attributes["bool_attribute"]
@@ -9621,6 +9797,14 @@ func (t SingleNestedBlockOneType) String() string {
 func (t SingleNestedBlockOneType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewSingleNestedBlockOneValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSingleNestedBlockOneValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	boolAttributeAttribute, ok := attributes["bool_attribute"]
@@ -9944,6 +10128,14 @@ func (t SingleNestedBlockThreeType) String() string {
 
 func (t SingleNestedBlockThreeType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if in.IsNull() {
+		return NewSingleNestedBlockThreeValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSingleNestedBlockThreeValueUnknown(), diags
+	}
 
 	attributes := in.Attributes()
 
@@ -10361,6 +10553,14 @@ func (t SingleNestedBlockThreeListNestedBlockOneType) String() string {
 func (t SingleNestedBlockThreeListNestedBlockOneType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewSingleNestedBlockThreeListNestedBlockOneValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSingleNestedBlockThreeListNestedBlockOneValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	listAttributeAttribute, ok := attributes["list_attribute"]
@@ -10711,6 +10911,14 @@ func (t SingleNestedBlockTwoType) String() string {
 func (t SingleNestedBlockTwoType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
 
+	if in.IsNull() {
+		return NewSingleNestedBlockTwoValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSingleNestedBlockTwoValueUnknown(), diags
+	}
+
 	attributes := in.Attributes()
 
 	singleNestedBlockTwoSingleNestedBlockOneAttribute, ok := attributes["single_nested_block_two_single_nested_block_one"]
@@ -11046,6 +11254,14 @@ func (t SingleNestedBlockTwoSingleNestedBlockOneType) String() string {
 
 func (t SingleNestedBlockTwoSingleNestedBlockOneType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
 	var diags diag.Diagnostics
+
+	if in.IsNull() {
+		return NewSingleNestedBlockTwoSingleNestedBlockOneValueNull(), diags
+	}
+
+	if in.IsUnknown() {
+		return NewSingleNestedBlockTwoSingleNestedBlockOneValueUnknown(), diags
+	}
 
 	attributes := in.Attributes()
 
