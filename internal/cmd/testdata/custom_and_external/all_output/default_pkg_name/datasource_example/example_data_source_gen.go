@@ -4987,6 +4987,8 @@ func (t SingleNestedAttributeThreeType) ValueFromObject(ctx context.Context, in 
 		diags.AddError(
 			"Attribute Wrong Type",
 			fmt.Sprintf(`single_nested_attribute_three_single_nested_attribute_one expected to be basetypes.ObjectValuable, was: %T`, singleNestedAttributeThreeSingleNestedAttributeOneAttribute))
+
+		return nil, diags
 	}
 
 	singleNestedAttributeThreeSingleNestedAttributeOneObjVal, singleNestedAttributeThreeSingleNestedAttributeOneObjValDiags := singleNestedAttributeThreeSingleNestedAttributeOneValuable.ToObjectValue(ctx)
@@ -4998,6 +5000,8 @@ func (t SingleNestedAttributeThreeType) ValueFromObject(ctx context.Context, in 
 		diags.AddError(
 			"Attribute Wrong Type",
 			fmt.Sprintf(`single_nested_attribute_three_single_nested_attribute_one expected type to be basetypes.ObjectTypable, was: %T`, t.AttrTypes["single_nested_attribute_three_single_nested_attribute_one"]))
+
+		return nil, diags
 	}
 
 	singleNestedAttributeThreeSingleNestedAttributeOneConverted, singleNestedAttributeThreeSingleNestedAttributeOneConvertedDiags := singleNestedAttributeThreeSingleNestedAttributeOneTypable.ValueFromObject(ctx, singleNestedAttributeThreeSingleNestedAttributeOneObjVal)
@@ -5717,6 +5721,8 @@ func (t SingleNestedAttributeTwoType) ValueFromObject(ctx context.Context, in ba
 		diags.AddError(
 			"Attribute Wrong Type",
 			fmt.Sprintf(`single_nested_attribute_two_single_nested_attribute_one expected to be basetypes.ObjectValuable, was: %T`, singleNestedAttributeTwoSingleNestedAttributeOneAttribute))
+
+		return nil, diags
 	}
 
 	singleNestedAttributeTwoSingleNestedAttributeOneObjVal, singleNestedAttributeTwoSingleNestedAttributeOneObjValDiags := singleNestedAttributeTwoSingleNestedAttributeOneValuable.ToObjectValue(ctx)
@@ -5728,6 +5734,8 @@ func (t SingleNestedAttributeTwoType) ValueFromObject(ctx context.Context, in ba
 		diags.AddError(
 			"Attribute Wrong Type",
 			fmt.Sprintf(`single_nested_attribute_two_single_nested_attribute_one expected type to be basetypes.ObjectTypable, was: %T`, t.AttrTypes["single_nested_attribute_two_single_nested_attribute_one"]))
+
+		return nil, diags
 	}
 
 	singleNestedAttributeTwoSingleNestedAttributeOneConverted, singleNestedAttributeTwoSingleNestedAttributeOneConvertedDiags := singleNestedAttributeTwoSingleNestedAttributeOneTypable.ValueFromObject(ctx, singleNestedAttributeTwoSingleNestedAttributeOneObjVal)
