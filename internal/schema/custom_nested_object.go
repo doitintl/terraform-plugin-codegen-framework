@@ -191,8 +191,7 @@ func (c CustomNestedObjectType) renderValueFromObject() ([]byte, error) {
 	var buf bytes.Buffer
 
 	t, err := template.New("").Funcs(template.FuncMap{
-		"hasPrefix": strings.HasPrefix,
-		"contains":  strings.Contains,
+		"contains": strings.Contains,
 	}).Parse(c.templates["valueFromObject"])
 
 	if err != nil {
