@@ -5,6 +5,7 @@ package schema
 
 import (
 	"bytes"
+	"strings"
 	"text/template"
 )
 
@@ -189,7 +190,9 @@ func (c CustomNestedObjectType) renderValue() ([]byte, error) {
 func (c CustomNestedObjectType) renderValueFromObject() ([]byte, error) {
 	var buf bytes.Buffer
 
-	t, err := template.New("").Parse(c.templates["valueFromObject"])
+	t, err := template.New("").Funcs(template.FuncMap{
+		"contains": strings.Contains,
+	}).Parse(c.templates["valueFromObject"])
 
 	if err != nil {
 		return nil, err
