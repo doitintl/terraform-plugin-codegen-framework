@@ -26,6 +26,7 @@ diags.AddError(
 return nil, diags
 }
 
+{{if contains $value "."}}
 {{$key.ToCamelCase}}Val, ok := {{$key.ToCamelCase}}Attribute.({{$value}})
 
 if !ok {
@@ -33,6 +34,37 @@ diags.AddError(
 "Attribute Wrong Type",
 fmt.Sprintf(`{{$key}} expected to be {{$value}}, was: %T`, {{$key.ToCamelCase}}Attribute))
 }
+{{else}}
+{{$key.ToCamelCase}}Valuable, ok := {{$key.ToCamelCase}}Attribute.(basetypes.ObjectValuable)
+
+if !ok {
+diags.AddError(
+"Attribute Wrong Type",
+fmt.Sprintf(`{{$key}} expected to be basetypes.ObjectValuable, was: %T`, {{$key.ToCamelCase}}Attribute))
+}
+
+{{$key.ToCamelCase}}ObjVal, {{$key.ToCamelCase}}ObjValDiags := {{$key.ToCamelCase}}Valuable.ToObjectValue(ctx)
+diags.Append({{$key.ToCamelCase}}ObjValDiags...)
+
+{{$key.ToCamelCase}}Typable, ok := t.AttrTypes["{{$key}}"].(basetypes.ObjectTypable)
+
+if !ok {
+diags.AddError(
+"Attribute Wrong Type",
+fmt.Sprintf(`{{$key}} expected type to be basetypes.ObjectTypable, was: %T`, t.AttrTypes["{{$key}}"]))
+}
+
+{{$key.ToCamelCase}}Converted, {{$key.ToCamelCase}}ConvertedDiags := {{$key.ToCamelCase}}Typable.ValueFromObject(ctx, {{$key.ToCamelCase}}ObjVal)
+diags.Append({{$key.ToCamelCase}}ConvertedDiags...)
+
+{{$key.ToCamelCase}}Val, ok := {{$key.ToCamelCase}}Converted.({{$value}})
+
+if !ok {
+diags.AddError(
+"Attribute Wrong Type",
+fmt.Sprintf(`{{$key}} expected to be {{$value}}, was: %T`, {{$key.ToCamelCase}}Converted))
+}
+{{end}}
 {{end}}
 
 if diags.HasError() {

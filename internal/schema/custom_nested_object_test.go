@@ -377,98 +377,14 @@ func TestCustomNestedObjectType_renderValueFromObject(t *testing.T) {
 			attrValues: map[string]string{
 				"bool_attribute": "basetypes.BoolValue",
 			},
-			expected: []byte(`
-func (t ExampleType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
-var diags diag.Diagnostics
-
-if in.IsNull() {
-return NewExampleValueNull(), diags
-}
-
-if in.IsUnknown() {
-return NewExampleValueUnknown(), diags
-}
-
-attributes := in.Attributes()
-
-
-boolAttributeAttribute, ok := attributes["bool_attribute"]
-
-if !ok {
-diags.AddError(
-"Attribute Missing",
-` + "`bool_attribute is missing from object`" + `)
-
-return nil, diags
-}
-
-boolAttributeVal, ok := boolAttributeAttribute.(basetypes.BoolValue)
-
-if !ok {
-diags.AddError(
-"Attribute Wrong Type",
-fmt.Sprintf(` + "`bool_attribute expected to be basetypes.BoolValue, was: %T`" + `, boolAttributeAttribute))
-}
-
-
-if diags.HasError() {
-return nil, diags
-}
-
-return ExampleValue{
-BoolAttribute: boolAttributeVal,
-state: attr.ValueStateKnown,
-}, diags
-}`),
+			expected: []byte("\nfunc (t ExampleType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {\nvar diags diag.Diagnostics\n\nif in.IsNull() {\nreturn NewExampleValueNull(), diags\n}\n\nif in.IsUnknown() {\nreturn NewExampleValueUnknown(), diags\n}\n\nattributes := in.Attributes()\n\n\nboolAttributeAttribute, ok := attributes[\"bool_attribute\"]\n\nif !ok {\ndiags.AddError(\n\"Attribute Missing\",\n`bool_attribute is missing from object`)\n\nreturn nil, diags\n}\n\n\nboolAttributeVal, ok := boolAttributeAttribute.(basetypes.BoolValue)\n\nif !ok {\ndiags.AddError(\n\"Attribute Wrong Type\",\nfmt.Sprintf(`bool_attribute expected to be basetypes.BoolValue, was: %T`, boolAttributeAttribute))\n}\n\n\n\nif diags.HasError() {\nreturn nil, diags\n}\n\nreturn ExampleValue{\nBoolAttribute: boolAttributeVal,\nstate: attr.ValueStateKnown,\n}, diags\n}"),
 		},
 		"attribute-name-same-as-generated-method-name": {
 			name: "Example",
 			attrValues: map[string]string{
 				"type": "basetypes.BoolValue",
 			},
-			expected: []byte(`
-func (t ExampleType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {
-var diags diag.Diagnostics
-
-if in.IsNull() {
-return NewExampleValueNull(), diags
-}
-
-if in.IsUnknown() {
-return NewExampleValueUnknown(), diags
-}
-
-attributes := in.Attributes()
-
-
-typeAttribute, ok := attributes["type"]
-
-if !ok {
-diags.AddError(
-"Attribute Missing",
-` + "`type is missing from object`" + `)
-
-return nil, diags
-}
-
-typeVal, ok := typeAttribute.(basetypes.BoolValue)
-
-if !ok {
-diags.AddError(
-"Attribute Wrong Type",
-fmt.Sprintf(` + "`type expected to be basetypes.BoolValue, was: %T`" + `, typeAttribute))
-}
-
-
-if diags.HasError() {
-return nil, diags
-}
-
-return ExampleValue{
-ExampleType: typeVal,
-state: attr.ValueStateKnown,
-}, diags
-}`),
+			expected: []byte("\nfunc (t ExampleType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {\nvar diags diag.Diagnostics\n\nif in.IsNull() {\nreturn NewExampleValueNull(), diags\n}\n\nif in.IsUnknown() {\nreturn NewExampleValueUnknown(), diags\n}\n\nattributes := in.Attributes()\n\n\ntypeAttribute, ok := attributes[\"type\"]\n\nif !ok {\ndiags.AddError(\n\"Attribute Missing\",\n`type is missing from object`)\n\nreturn nil, diags\n}\n\n\ntypeVal, ok := typeAttribute.(basetypes.BoolValue)\n\nif !ok {\ndiags.AddError(\n\"Attribute Wrong Type\",\nfmt.Sprintf(`type expected to be basetypes.BoolValue, was: %T`, typeAttribute))\n}\n\n\n\nif diags.HasError() {\nreturn nil, diags\n}\n\nreturn ExampleValue{\nExampleType: typeVal,\nstate: attr.ValueStateKnown,\n}, diags\n}"),
 		},
 		"no-attributes": {
 			name: "Example",
@@ -494,6 +410,21 @@ return ExampleValue{
 state: attr.ValueStateKnown,
 }, diags
 }`),
+		},
+		"nested-object-attribute": {
+			name: "Example",
+			attrValues: map[string]string{
+				"nested_obj": "NestedObjValue",
+			},
+			expected: []byte("\nfunc (t ExampleType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {\nvar diags diag.Diagnostics\n\nif in.IsNull() {\nreturn NewExampleValueNull(), diags\n}\n\nif in.IsUnknown() {\nreturn NewExampleValueUnknown(), diags\n}\n\nattributes := in.Attributes()\n\n\nnestedObjAttribute, ok := attributes[\"nested_obj\"]\n\nif !ok {\ndiags.AddError(\n\"Attribute Missing\",\n`nested_obj is missing from object`)\n\nreturn nil, diags\n}\n\n\nnestedObjValuable, ok := nestedObjAttribute.(basetypes.ObjectValuable)\n\nif !ok {\ndiags.AddError(\n\"Attribute Wrong Type\",\nfmt.Sprintf(`nested_obj expected to be basetypes.ObjectValuable, was: %T`, nestedObjAttribute))\n}\n\nnestedObjObjVal, nestedObjObjValDiags := nestedObjValuable.ToObjectValue(ctx)\ndiags.Append(nestedObjObjValDiags...)\n\nnestedObjTypable, ok := t.AttrTypes[\"nested_obj\"].(basetypes.ObjectTypable)\n\nif !ok {\ndiags.AddError(\n\"Attribute Wrong Type\",\nfmt.Sprintf(`nested_obj expected type to be basetypes.ObjectTypable, was: %T`, t.AttrTypes[\"nested_obj\"]))\n}\n\nnestedObjConverted, nestedObjConvertedDiags := nestedObjTypable.ValueFromObject(ctx, nestedObjObjVal)\ndiags.Append(nestedObjConvertedDiags...)\n\nnestedObjVal, ok := nestedObjConverted.(NestedObjValue)\n\nif !ok {\ndiags.AddError(\n\"Attribute Wrong Type\",\nfmt.Sprintf(`nested_obj expected to be NestedObjValue, was: %T`, nestedObjConverted))\n}\n\n\n\nif diags.HasError() {\nreturn nil, diags\n}\n\nreturn ExampleValue{\nNestedObj: nestedObjVal,\nstate: attr.ValueStateKnown,\n}, diags\n}"),
+		},
+		"mixed-basetype-and-nested": {
+			name: "Example",
+			attrValues: map[string]string{
+				"child": "ChildValue",
+				"name":  "basetypes.StringValue",
+			},
+			expected: []byte("\nfunc (t ExampleType) ValueFromObject(ctx context.Context, in basetypes.ObjectValue) (basetypes.ObjectValuable, diag.Diagnostics) {\nvar diags diag.Diagnostics\n\nif in.IsNull() {\nreturn NewExampleValueNull(), diags\n}\n\nif in.IsUnknown() {\nreturn NewExampleValueUnknown(), diags\n}\n\nattributes := in.Attributes()\n\n\nchildAttribute, ok := attributes[\"child\"]\n\nif !ok {\ndiags.AddError(\n\"Attribute Missing\",\n`child is missing from object`)\n\nreturn nil, diags\n}\n\n\nchildValuable, ok := childAttribute.(basetypes.ObjectValuable)\n\nif !ok {\ndiags.AddError(\n\"Attribute Wrong Type\",\nfmt.Sprintf(`child expected to be basetypes.ObjectValuable, was: %T`, childAttribute))\n}\n\nchildObjVal, childObjValDiags := childValuable.ToObjectValue(ctx)\ndiags.Append(childObjValDiags...)\n\nchildTypable, ok := t.AttrTypes[\"child\"].(basetypes.ObjectTypable)\n\nif !ok {\ndiags.AddError(\n\"Attribute Wrong Type\",\nfmt.Sprintf(`child expected type to be basetypes.ObjectTypable, was: %T`, t.AttrTypes[\"child\"]))\n}\n\nchildConverted, childConvertedDiags := childTypable.ValueFromObject(ctx, childObjVal)\ndiags.Append(childConvertedDiags...)\n\nchildVal, ok := childConverted.(ChildValue)\n\nif !ok {\ndiags.AddError(\n\"Attribute Wrong Type\",\nfmt.Sprintf(`child expected to be ChildValue, was: %T`, childConverted))\n}\n\n\nnameAttribute, ok := attributes[\"name\"]\n\nif !ok {\ndiags.AddError(\n\"Attribute Missing\",\n`name is missing from object`)\n\nreturn nil, diags\n}\n\n\nnameVal, ok := nameAttribute.(basetypes.StringValue)\n\nif !ok {\ndiags.AddError(\n\"Attribute Wrong Type\",\nfmt.Sprintf(`name expected to be basetypes.StringValue, was: %T`, nameAttribute))\n}\n\n\n\nif diags.HasError() {\nreturn nil, diags\n}\n\nreturn ExampleValue{\nChild: childVal,\nName: nameVal,\nstate: attr.ValueStateKnown,\n}, diags\n}"),
 		},
 	}
 
