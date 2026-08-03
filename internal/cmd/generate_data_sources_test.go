@@ -21,6 +21,14 @@ func TestGenerateDataSourcesCommand(t *testing.T) {
 			irInputPath:   "testdata/custom_and_external/ir.json",
 			goldenFileDir: "testdata/custom_and_external/data_sources_output",
 		},
+		// Several siblings share the attribute name "compute" with a different
+		// shape each, while "metric" is shared by two attributes with the same
+		// shape. The golden output pins both halves of the behaviour: distinct
+		// shapes get distinct type names, identical shapes keep sharing one.
+		"sibling_collision": {
+			irInputPath:   "testdata/sibling_collision/ir.json",
+			goldenFileDir: "testdata/sibling_collision/data_sources_output",
+		},
 	}
 	for name, testCase := range testCases {
 

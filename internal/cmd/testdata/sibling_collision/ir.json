@@ -1,0 +1,133 @@
+{
+  "datasources": [
+    {
+      "name": "example",
+      "schema": {
+        "attributes": [
+          {
+            "name": "cost",
+            "single_nested": {
+              "attributes": [
+                {
+                  "name": "metric",
+                  "single_nested": {
+                    "attributes": [
+                      {
+                        "name": "value",
+                        "string": {
+                          "computed_optional_required": "computed"
+                        }
+                      }
+                    ],
+                    "computed_optional_required": "computed"
+                  }
+                }
+              ],
+              "computed_optional_required": "computed"
+            }
+          },
+          {
+            "name": "daily_coverage",
+            "single_nested": {
+              "attributes": [
+                {
+                  "name": "compute",
+                  "single_nested": {
+                    "attributes": [
+                      {
+                        "name": "on_demand_cost",
+                        "float64": {
+                          "computed_optional_required": "computed"
+                        }
+                      }
+                    ],
+                    "computed_optional_required": "computed"
+                  }
+                }
+              ],
+              "computed_optional_required": "computed"
+            }
+          },
+          {
+            "name": "onboarding_status",
+            "single_nested": {
+              "attributes": [
+                {
+                  "name": "compute",
+                  "single_nested": {
+                    "attributes": [
+                      {
+                        "name": "status",
+                        "string": {
+                          "computed_optional_required": "computed"
+                        }
+                      }
+                    ],
+                    "computed_optional_required": "computed"
+                  }
+                }
+              ],
+              "computed_optional_required": "computed"
+            }
+          },
+          {
+            "name": "savings_totals",
+            "single_nested": {
+              "attributes": [
+                {
+                  "name": "compute",
+                  "single_nested": {
+                    "attributes": [
+                      {
+                        "name": "lifetime",
+                        "single_nested": {
+                          "attributes": [
+                            {
+                              "name": "amount",
+                              "float64": {
+                                "computed_optional_required": "computed"
+                              }
+                            }
+                          ],
+                          "computed_optional_required": "computed"
+                        }
+                      }
+                    ],
+                    "computed_optional_required": "computed"
+                  }
+                }
+              ],
+              "computed_optional_required": "computed"
+            }
+          },
+          {
+            "name": "usage",
+            "single_nested": {
+              "attributes": [
+                {
+                  "name": "metric",
+                  "single_nested": {
+                    "attributes": [
+                      {
+                        "name": "value",
+                        "string": {
+                          "computed_optional_required": "computed"
+                        }
+                      }
+                    ],
+                    "computed_optional_required": "computed"
+                  }
+                }
+              ],
+              "computed_optional_required": "computed"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "provider": {
+    "name": "example"
+  },
+  "version": "0.1"
+}
