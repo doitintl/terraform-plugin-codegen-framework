@@ -183,156 +183,142 @@ func (g GeneratorSetNestedBlock) GetBlocks() schema.GeneratorBlocks {
 }
 
 func (g GeneratorSetNestedBlock) CustomTypeAndValue(name string, generated map[string][]byte) ([]byte, error) {
-	// Check if this name was already generated with identical content.
-	// If so, skip to avoid duplicate declarations. If the name exists but
-	// with nil content (sentinel for recursion guard), we proceed.
-	if prev, ok := generated[name]; ok && prev != nil {
-		return nil, nil
-	}
+	return schema.DedupeGenerated(name, generated, func() ([]byte, error) {
+		var buf bytes.Buffer
 
-	// Set a nil sentinel to prevent infinite recursion if a nested
-	// attribute references the same name.
-	generated[name] = nil
+		attributeAttrValues, err := g.NestedObject.Attributes.AttrValues()
 
-	var buf bytes.Buffer
+		if err != nil {
+			return nil, err
+		}
 
-	attributeAttrValues, err := g.NestedObject.Attributes.AttrValues()
+		blockAttrValues, err := g.NestedObject.Blocks.AttrValues()
 
-	if err != nil {
-		return nil, err
-	}
+		if err != nil {
+			return nil, err
+		}
 
-	blockAttrValues, err := g.NestedObject.Blocks.AttrValues()
+		attributesBlocksAttrValues := make(map[string]string, len(g.NestedObject.Attributes)+len(g.NestedObject.Blocks))
 
-	if err != nil {
-		return nil, err
-	}
+		maps.Copy(attributesBlocksAttrValues, attributeAttrValues)
 
-	attributesBlocksAttrValues := make(map[string]string, len(g.NestedObject.Attributes)+len(g.NestedObject.Blocks))
+		maps.Copy(attributesBlocksAttrValues, blockAttrValues)
 
-	maps.Copy(attributesBlocksAttrValues, attributeAttrValues)
+		objectType := schema.NewCustomNestedObjectType(name, attributesBlocksAttrValues)
 
-	maps.Copy(attributesBlocksAttrValues, blockAttrValues)
+		b, err := objectType.Render()
 
-	objectType := schema.NewCustomNestedObjectType(name, attributesBlocksAttrValues)
+		if err != nil {
+			return nil, err
+		}
 
-	b, err := objectType.Render()
+		buf.Write(b)
 
-	if err != nil {
-		return nil, err
-	}
+		attributeTypes, err := g.NestedObject.Attributes.AttributeTypes()
 
-	buf.Write(b)
+		if err != nil {
+			return nil, err
+		}
 
-	attributeTypes, err := g.NestedObject.Attributes.AttributeTypes()
+		blockTypes, err := g.NestedObject.Blocks.BlockTypes()
 
-	if err != nil {
-		return nil, err
-	}
+		if err != nil {
+			return nil, err
+		}
 
-	blockTypes, err := g.NestedObject.Blocks.BlockTypes()
+		attributesBlocksTypes := make(map[string]string, len(g.NestedObject.Attributes)+len(g.NestedObject.Blocks))
 
-	if err != nil {
-		return nil, err
-	}
+		maps.Copy(attributesBlocksTypes, attributeTypes)
 
-	attributesBlocksTypes := make(map[string]string, len(g.NestedObject.Attributes)+len(g.NestedObject.Blocks))
+		maps.Copy(attributesBlocksTypes, blockTypes)
 
-	maps.Copy(attributesBlocksTypes, attributeTypes)
+		attributeAttrTypes, err := g.NestedObject.Attributes.AttrTypes()
 
-	maps.Copy(attributesBlocksTypes, blockTypes)
+		if err != nil {
+			return nil, err
+		}
 
-	attributeAttrTypes, err := g.NestedObject.Attributes.AttrTypes()
+		blockAttrTypes, err := g.NestedObject.Blocks.AttrTypes()
 
-	if err != nil {
-		return nil, err
-	}
+		if err != nil {
+			return nil, err
+		}
 
-	blockAttrTypes, err := g.NestedObject.Blocks.AttrTypes()
+		attributesBlocksAttrTypes := make(map[string]string, len(g.NestedObject.Attributes)+len(g.NestedObject.Blocks))
 
-	if err != nil {
-		return nil, err
-	}
+		maps.Copy(attributesBlocksAttrTypes, attributeAttrTypes)
 
-	attributesBlocksAttrTypes := make(map[string]string, len(g.NestedObject.Attributes)+len(g.NestedObject.Blocks))
+		maps.Copy(attributesBlocksAttrTypes, blockAttrTypes)
 
-	maps.Copy(attributesBlocksAttrTypes, attributeAttrTypes)
+		// Only attributes need to be processed here as we're only concerned with List, Map, and Set.
+		attributeCollectionTypes, err := g.NestedObject.Attributes.CollectionTypes()
 
-	maps.Copy(attributesBlocksAttrTypes, blockAttrTypes)
+		if err != nil {
+			return nil, err
+		}
 
-	// Only attributes need to be processed here as we're only concerned with List, Map, and Set.
-	attributeCollectionTypes, err := g.NestedObject.Attributes.CollectionTypes()
+		objectValue := schema.NewCustomNestedObjectValue(name, attributesBlocksTypes, attributesBlocksAttrTypes, attributesBlocksAttrValues, attributeCollectionTypes)
 
-	if err != nil {
-		return nil, err
-	}
+		b, err = objectValue.Render()
 
-	objectValue := schema.NewCustomNestedObjectValue(name, attributesBlocksTypes, attributesBlocksAttrTypes, attributesBlocksAttrValues, attributeCollectionTypes)
+		if err != nil {
+			return nil, err
+		}
 
-	b, err = objectValue.Render()
+		buf.Write(b)
 
-	if err != nil {
-		return nil, err
-	}
+		attributeKeys := g.NestedObject.Attributes.SortedKeys()
 
-	buf.Write(b)
+		blockKeys := g.NestedObject.Blocks.SortedKeys()
 
-	attributeKeys := g.NestedObject.Attributes.SortedKeys()
+		// Recursively call CustomTypeAndValue() for each attribute that implements
+		// CustomTypeAndValue interface (i.e, nested attributes).
+		for _, k := range attributeKeys {
+			// Use the effective type name if the attribute's name was
+			// changed for conflict resolution.
+			effectiveName := k
+			if t, ok2 := g.NestedObject.Attributes[k].(schema.EffectiveTypeName); ok2 {
+				if tn := t.EffectiveTypeName(); tn != "" {
+					effectiveName = tn
+				}
+			}
 
-	blockKeys := g.NestedObject.Blocks.SortedKeys()
+			if c, ok := g.NestedObject.Attributes[k].(schema.CustomTypeAndValue); ok {
+				b, err := c.CustomTypeAndValue(effectiveName, generated)
 
-	// Recursively call CustomTypeAndValue() for each attribute that implements
-	// CustomTypeAndValue interface (i.e, nested attributes).
-	for _, k := range attributeKeys {
-		// Use the effective type name if the attribute's name was
-		// changed for conflict resolution.
-		effectiveName := k
-		if t, ok2 := g.NestedObject.Attributes[k].(schema.EffectiveTypeName); ok2 {
-			if tn := t.EffectiveTypeName(); tn != "" {
-				effectiveName = tn
+				if err != nil {
+					return nil, err
+				}
+
+				buf.Write(b)
 			}
 		}
 
-		if c, ok := g.NestedObject.Attributes[k].(schema.CustomTypeAndValue); ok {
-			b, err := c.CustomTypeAndValue(effectiveName, generated)
-
-			if err != nil {
-				return nil, err
+		for _, k := range blockKeys {
+			// Use the effective type name if the attribute's name was
+			// changed for conflict resolution.
+			effectiveName := k
+			if t, ok2 := g.NestedObject.Blocks[k].(schema.EffectiveTypeName); ok2 {
+				if tn := t.EffectiveTypeName(); tn != "" {
+					effectiveName = tn
+				}
 			}
 
-			buf.Write(b)
-		}
-	}
+			if c, ok := g.NestedObject.Blocks[k].(schema.CustomTypeAndValue); ok {
+				b, err := c.CustomTypeAndValue(effectiveName, generated)
 
-	for _, k := range blockKeys {
-		// Use the effective type name if the attribute's name was
-		// changed for conflict resolution.
-		effectiveName := k
-		if t, ok2 := g.NestedObject.Blocks[k].(schema.EffectiveTypeName); ok2 {
-			if tn := t.EffectiveTypeName(); tn != "" {
-				effectiveName = tn
+				if err != nil {
+					return nil, err
+				}
+
+				buf.Write(b)
+
+				continue
 			}
 		}
 
-		if c, ok := g.NestedObject.Blocks[k].(schema.CustomTypeAndValue); ok {
-			b, err := c.CustomTypeAndValue(effectiveName, generated)
-
-			if err != nil {
-				return nil, err
-			}
-
-			buf.Write(b)
-
-			continue
-		}
-	}
-
-	// Store the generated bytes so future calls with the same name
-	// and identical content will be skipped.
-	result := buf.Bytes()
-	generated[name] = result
-
-	return result, nil
+		return buf.Bytes(), nil
+	})
 }
 
 func (g GeneratorSetNestedBlock) ToFromFunctions(name string) ([]byte, error) {
@@ -397,4 +383,3 @@ func (g GeneratorSetNestedBlock) From() (schema.ToFromConversion, error) {
 func (g GeneratorSetNestedBlock) EffectiveTypeName() string {
 	return g.NestedBlockObject.TypeName()
 }
-

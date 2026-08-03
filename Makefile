@@ -35,6 +35,11 @@ testdata:
 		--package generated \
 		--output ./internal/cmd/testdata/custom_and_external/data_sources_output
 
+	go run ./cmd/tfplugingen-framework generate data-sources \
+		--input ./internal/cmd/testdata/sibling_collision/ir.json \
+		--package generated \
+		--output ./internal/cmd/testdata/sibling_collision/data_sources_output
+
 	go run ./cmd/tfplugingen-framework generate provider \
 		--input ./internal/cmd/testdata/custom_and_external/ir.json \
 		--package generated \

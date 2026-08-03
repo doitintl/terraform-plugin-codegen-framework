@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"sort"
 	"strings"
 	"text/template"
 
@@ -255,66 +256,172 @@ func (g GeneratorSchema) Models(name string) ([]model.Model, error) {
 type typeFingerprint struct {
 	fingerprint string
 	depth       int
-	parentName  string
-	// attrPath tracks the path of attribute keys to reach this type in the tree
+	// attrPath tracks the path of attribute keys to reach this type in the tree.
+	// Its last element is the attribute's own key; everything before it is the
+	// ancestor chain used to disambiguate a conflicting name.
 	attrPath []string
 }
 
 // ResolveTypeNameConflicts walks all nested attributes and blocks recursively,
-// detecting name conflicts where the same attribute name appears at different
-// nesting levels with different schemas. When a conflict is found, the deeper
-// attribute gets its type name prefixed with the parent name to disambiguate.
+// detecting name conflicts where the same attribute name is used for two or more
+// differently-shaped objects. Occurrences are grouped by schema fingerprint: one
+// group keeps the bare name and every other group is given a name qualified with
+// enough of its ancestor chain to be unique.
+//
+// Grouping, rather than renaming each occurrence individually, is what preserves
+// legitimate type sharing: when the same name is used for the same shape in
+// several places, those occurrences stay in one group and continue to share a
+// single generated type.
 //
 // This method mutates the GeneratorSchema's Attributes map in place and must be
 // called before Schema() and CustomTypeValueBytes().
 func (g *GeneratorSchema) ResolveTypeNameConflicts() {
 	// Collect all type fingerprints
 	fingerprints := make(map[string][]typeFingerprint)
-	collectFingerprints(g.Attributes, fingerprints, 0, "", nil)
-	collectBlockFingerprints(g.Blocks, fingerprints, 0, "", nil)
+	collectFingerprints(g.Attributes, fingerprints, 0, nil)
+	collectBlockFingerprints(g.Blocks, fingerprints, 0, nil)
 
-	// Find conflicts: same name, different fingerprints
-	for name, fps := range fingerprints {
+	// taken records every type name that is already spoken for, keyed by the
+	// PascalCase form that actually appears in the generated Go. It is seeded
+	// with every bare nested-object name so that a disambiguated name can never
+	// shadow a real one.
+	taken := make(map[string]struct{}, len(fingerprints))
+
+	names := make([]string, 0, len(fingerprints))
+
+	for name := range fingerprints {
+		names = append(names, name)
+		taken[FrameworkIdentifier(name).ToPascalCase()] = struct{}{}
+	}
+
+	// Sorted so that the names assigned are stable across runs.
+	sort.Strings(names)
+
+	for _, name := range names {
+		fps := fingerprints[name]
+
 		if len(fps) <= 1 {
 			continue
 		}
 
-		// Check if all fingerprints are the same (same schema, just shared)
-		allSame := true
-		for i := 1; i < len(fps); i++ {
-			if fps[i].fingerprint != fps[0].fingerprint {
-				allSame = false
-				break
-			}
+		groups := groupByFingerprint(fps)
+
+		if len(groups) == 1 {
+			// No conflict: every occurrence of this name has the same schema,
+			// so sharing a single generated type is correct.
+			continue
 		}
 
-		if allSame {
-			continue // No conflict: all types with this name have the same schema
-		}
+		canonical := canonicalGroup(groups)
 
-		// Conflict detected: disambiguate the deeper ones by prefixing with parent name.
-		// The shallowest occurrence keeps the bare name.
-		minDepth := fps[0].depth
-		for _, fp := range fps[1:] {
-			if fp.depth < minDepth {
-				minDepth = fp.depth
-			}
-		}
-
-		for _, fp := range fps {
-			if fp.depth == minDepth {
-				continue // Keep the shallowest occurrence with the bare name
+		for i, group := range groups {
+			if i == canonical {
+				continue // Keeps the bare name.
 			}
 
-			// Prefix with parent name to disambiguate
-			newName := fp.parentName + "_" + name
-			resolveAtPath(g.Attributes, fp.attrPath, newName)
+			newName := disambiguate(group[0], name, taken)
+
+			taken[FrameworkIdentifier(newName).ToPascalCase()] = struct{}{}
+
+			// Applied to every occurrence in the group so that occurrences
+			// sharing a shape keep sharing a single generated type.
+			for _, fp := range group {
+				resolveAtPath(g.Attributes, fp.attrPath, newName)
+			}
+		}
+	}
+}
+
+// groupByFingerprint partitions occurrences by schema fingerprint, preserving
+// the order in which each distinct fingerprint was first seen.
+func groupByFingerprint(fps []typeFingerprint) [][]typeFingerprint {
+	var groups [][]typeFingerprint
+
+	index := make(map[string]int)
+
+	for _, fp := range fps {
+		if i, ok := index[fp.fingerprint]; ok {
+			groups[i] = append(groups[i], fp)
+			continue
+		}
+
+		index[fp.fingerprint] = len(groups)
+		groups = append(groups, []typeFingerprint{fp})
+	}
+
+	return groups
+}
+
+// canonicalGroup returns the index of the group that keeps the bare name: the
+// one containing the shallowest occurrence, breaking ties on the attribute path.
+func canonicalGroup(groups [][]typeFingerprint) int {
+	canonical := 0
+
+	var best *typeFingerprint
+
+	for i := range groups {
+		for j := range groups[i] {
+			fp := &groups[i][j]
+
+			if best == nil || occurrenceLess(fp, best) {
+				best = fp
+				canonical = i
+			}
+		}
+	}
+
+	return canonical
+}
+
+// occurrenceLess orders occurrences by nesting depth, then by attribute path.
+func occurrenceLess(a, b *typeFingerprint) bool {
+	if a.depth != b.depth {
+		return a.depth < b.depth
+	}
+
+	for i := 0; i < len(a.attrPath) && i < len(b.attrPath); i++ {
+		if a.attrPath[i] != b.attrPath[i] {
+			return a.attrPath[i] < b.attrPath[i]
+		}
+	}
+
+	return len(a.attrPath) < len(b.attrPath)
+}
+
+// disambiguate returns a type name for an occurrence that cannot keep the bare
+// name. It walks up the ancestor chain, trying "parent_name", then
+// "grandparent_parent_name", and so on, returning the first candidate that is
+// not already taken. A numeric suffix is the deterministic last resort.
+func disambiguate(fp typeFingerprint, name string, taken map[string]struct{}) string {
+	// attrPath is [root, ..., parent, name], so everything but the last element
+	// is the ancestor chain.
+	ancestors := fp.attrPath
+
+	if len(ancestors) > 0 {
+		ancestors = ancestors[:len(ancestors)-1]
+	}
+
+	for i := len(ancestors) - 1; i >= 0; i-- {
+		candidate := strings.Join(append(append([]string{}, ancestors[i:]...), name), "_")
+
+		if _, ok := taken[FrameworkIdentifier(candidate).ToPascalCase()]; !ok {
+			return candidate
+		}
+	}
+
+	base := strings.Join(append(append([]string{}, ancestors...), name), "_")
+
+	for n := 2; ; n++ {
+		candidate := fmt.Sprintf("%s_%d", base, n)
+
+		if _, ok := taken[FrameworkIdentifier(candidate).ToPascalCase()]; !ok {
+			return candidate
 		}
 	}
 }
 
 // collectFingerprints recursively walks attributes and collects type fingerprints.
-func collectFingerprints(attrs GeneratorAttributes, fps map[string][]typeFingerprint, depth int, parentName string, path []string) {
+func collectFingerprints(attrs GeneratorAttributes, fps map[string][]typeFingerprint, depth int, path []string) {
 	for _, k := range attrs.SortedKeys() {
 		attr := attrs[k]
 		if attr == nil {
@@ -332,18 +439,17 @@ func collectFingerprints(attrs GeneratorAttributes, fps map[string][]typeFingerp
 			fps[k] = append(fps[k], typeFingerprint{
 				fingerprint: fp,
 				depth:       depth,
-				parentName:  parentName,
 				attrPath:    currentPath,
 			})
 
 			// Recurse into nested attributes
-			collectFingerprints(nestedAttrs, fps, depth+1, k, currentPath)
+			collectFingerprints(nestedAttrs, fps, depth+1, currentPath)
 		}
 	}
 }
 
 // collectBlockFingerprints recursively walks blocks and collects type fingerprints.
-func collectBlockFingerprints(blocks GeneratorBlocks, fps map[string][]typeFingerprint, depth int, parentName string, path []string) {
+func collectBlockFingerprints(blocks GeneratorBlocks, fps map[string][]typeFingerprint, depth int, path []string) {
 	for _, k := range blocks.SortedKeys() {
 		block := blocks[k]
 		if block == nil {
@@ -359,23 +465,37 @@ func collectBlockFingerprints(blocks GeneratorBlocks, fps map[string][]typeFinge
 			fps[k] = append(fps[k], typeFingerprint{
 				fingerprint: fp,
 				depth:       depth,
-				parentName:  parentName,
 				attrPath:    currentPath,
 			})
 
-			collectFingerprints(nestedAttrs, fps, depth+1, k, currentPath)
+			collectFingerprints(nestedAttrs, fps, depth+1, currentPath)
 		}
 
 		if nested, ok := block.(Blocks); ok {
 			nestedBlocks := nested.GetBlocks()
-			collectBlockFingerprints(nestedBlocks, fps, depth+1, k, currentPath)
+			collectBlockFingerprints(nestedBlocks, fps, depth+1, currentPath)
 		}
 	}
 }
 
-// computeAttrFingerprint computes a string fingerprint from a GeneratorAttributes map.
-// Two attributes with the same fingerprint have the same schema structure at depth 1.
+// fingerprintMaxDepth caps how far computeAttrFingerprint recurses. The IR is a
+// tree so there are no true cycles; the cap is insurance against a pathologically
+// deep schema, and is far beyond any depth the framework can usefully generate.
+const fingerprintMaxDepth = 10
+
+// computeAttrFingerprint computes a string fingerprint from a GeneratorAttributes
+// map. Two attributes with the same fingerprint have the same schema structure,
+// recursively, up to fingerprintMaxDepth levels of nesting.
+//
+// The fingerprint must capture nested structure, not just the immediate children:
+// two same-named objects that differ only in a grandchild would otherwise be
+// treated as interchangeable and one would silently win, producing a schema that
+// compiles but describes the wrong shape.
 func computeAttrFingerprint(attrs GeneratorAttributes) string {
+	return computeAttrFingerprintDepth(attrs, fingerprintMaxDepth)
+}
+
+func computeAttrFingerprintDepth(attrs GeneratorAttributes, remaining int) string {
 	keys := attrs.SortedKeys()
 	var parts []string
 	for _, k := range keys {
@@ -383,7 +503,16 @@ func computeAttrFingerprint(attrs GeneratorAttributes) string {
 		if a == nil {
 			continue
 		}
-		parts = append(parts, fmt.Sprintf("%s:%T", k, a))
+
+		part := fmt.Sprintf("%s:%T", k, a)
+
+		if remaining > 0 {
+			if nested, ok := a.(Attributes); ok {
+				part += "{" + computeAttrFingerprintDepth(nested.GetAttributes(), remaining-1) + "}"
+			}
+		}
+
+		parts = append(parts, part)
 	}
 	return strings.Join(parts, ",")
 }
