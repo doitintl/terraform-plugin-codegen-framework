@@ -70,10 +70,11 @@ func TestDedupeGenerated_IdenticalRepeat(t *testing.T) {
 		t.Errorf("expected no output for an identical repeat, got %q", got)
 	}
 
-	// The first occurrence already emitted the subtree, so a repeat has no
-	// reason to walk it again.
-	if childCalls != 1 {
-		t.Errorf("expected children to render once, rendered %d times", childCalls)
+	// Once to emit, once to validate. The repeat has to walk the subtree even
+	// though it emits nothing, because matching declarations do not prove that
+	// the descendants match.
+	if childCalls != 2 {
+		t.Errorf("expected children to render twice, rendered %d times", childCalls)
 	}
 
 	if string(generated["metric"]) != "type MetricValue struct{}" {
@@ -122,6 +123,100 @@ func TestDedupeGenerated_SharedSubtreeRepeat(t *testing.T) {
 
 	if second != nil {
 		t.Errorf("expected no output for an identical repeat, got %q", second)
+	}
+}
+
+// TestDedupeGenerated_RepeatDivergesBelowDeclaration covers a conflict that the
+// declaration comparison cannot see on its own: two occurrences of "x" declare
+// identically, because a declaration names its child "p" without describing it,
+// but their copies of "p" have different shapes.
+//
+// ResolveTypeNameConflicts separates this for attribute-rooted conflicts. It
+// cannot for block-rooted ones (issue #17) or for a divergence below the
+// fingerprint depth cap, so the walk has to reach "p" and let it report.
+func TestDedupeGenerated_RepeatDivergesBelowDeclaration(t *testing.T) {
+	t.Parallel()
+
+	generated := make(map[string][]byte)
+
+	renderX := func(pDecl string) ([]byte, error) {
+		return DedupeGenerated("x", generated, func() ([]byte, error) {
+			return []byte("type XValue struct{ P PValue }"), nil
+		}, func() ([]byte, error) {
+			return DedupeGenerated("p", generated, func() ([]byte, error) {
+				return []byte(pDecl), nil
+			}, noChildren)
+		})
+	}
+
+	if _, err := renderX("type PValue struct{ Q string }"); err != nil {
+		t.Fatalf("unexpected error on first occurrence: %s", err)
+	}
+
+	got, err := renderX("type PValue struct{ R string }")
+
+	if err == nil {
+		t.Fatal("expected an error for subtrees that diverge below the declaration")
+	}
+
+	if got != nil {
+		t.Errorf("expected no output alongside the error, got %q", got)
+	}
+
+	// The error must name the descendant that actually differs, not its parent.
+	if !strings.Contains(err.Error(), `"p"`) {
+		t.Errorf("error should name the offending type, got: %s", err)
+	}
+
+	// The sentinel reinstated for the walk must be restored, not left behind.
+	if string(generated["x"]) != "type XValue struct{ P PValue }" {
+		t.Errorf("recorded declaration was not restored: %q", generated["x"])
+	}
+}
+
+// TestDedupeGenerated_RepeatEmitsFirstRenderOfDescendant covers a descendant
+// that the repeat walk is the first to reach. Its declaration gets recorded, so
+// it has to be emitted too -- dropping it would leave the schema referencing a
+// type that was never declared.
+func TestDedupeGenerated_RepeatEmitsFirstRenderOfDescendant(t *testing.T) {
+	t.Parallel()
+
+	generated := make(map[string][]byte)
+
+	// The first occurrence reaches "x" while "x" is still rendering, so the
+	// sentinel stops it and "p" is never emitted.
+	var renderX func() ([]byte, error)
+
+	first := true
+
+	renderX = func() ([]byte, error) {
+		return DedupeGenerated("x", generated, func() ([]byte, error) {
+			return []byte("type XValue struct{}"), nil
+		}, func() ([]byte, error) {
+			if first {
+				first = false
+
+				return renderX()
+			}
+
+			return DedupeGenerated("p", generated, func() ([]byte, error) {
+				return []byte("type PValue struct{}"), nil
+			}, noChildren)
+		})
+	}
+
+	if _, err := renderX(); err != nil {
+		t.Fatalf("unexpected error on first occurrence: %s", err)
+	}
+
+	got, err := renderX()
+
+	if err != nil {
+		t.Fatalf("unexpected error on repeat: %s", err)
+	}
+
+	if string(got) != "type PValue struct{}" {
+		t.Errorf("a descendant first rendered during a repeat must still be emitted, got %q", got)
 	}
 }
 

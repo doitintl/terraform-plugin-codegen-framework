@@ -38,13 +38,19 @@ import (
 // their declarations match byte-for-byte.
 //
 // When a name is requested a second time the declaration is re-rendered and
-// compared against the one already emitted. Identical output means genuine
-// sharing: the first occurrence already emitted the whole subtree, so nothing
-// further is emitted. Differing output means two distinct object shapes are
-// competing for one Go identifier, which ResolveTypeNameConflicts should have
-// separated; that is reported as an error rather than silently dropping the
-// second subtree, which would leave the schema referencing types that were never
-// declared.
+// compared against the one already emitted. Differing output means two distinct
+// object shapes are competing for one Go identifier, which
+// ResolveTypeNameConflicts should have separated; that is reported as an error
+// rather than silently dropping the second subtree, which would leave the schema
+// referencing types that were never declared.
+//
+// Identical output is not by itself proof that the two subtrees match, because a
+// declaration names its immediate children without describing them, so the walk
+// continues into the subtree on a repeat and every descendant reaches the same
+// comparison. That is what catches a divergence deeper than the fingerprint
+// depth cap, or one rooted in a block, where ResolveTypeNameConflicts cannot
+// currently rename either occurrence (issue #17). The walk normally emits
+// nothing, since the first occurrence already emitted the subtree.
 func DedupeGenerated(name string, generated map[string][]byte, renderDecl func() ([]byte, error), renderChildren func() ([]byte, error)) ([]byte, error) {
 	prev, seen := generated[name]
 
@@ -72,8 +78,36 @@ func DedupeGenerated(name string, generated map[string][]byte, renderDecl func()
 				"two distinct object shapes share this attribute name and could not be disambiguated", name)
 		}
 
-		// Same shape, already declared along with its whole subtree.
-		return nil, nil
+		// Matching declarations are not on their own proof that the two subtrees
+		// match. A declaration names its immediate children and their framework
+		// types, but says nothing about what those children contain, so two
+		// occurrences can declare identically and still diverge further down --
+		// below the fingerprint depth cap, or anywhere at all when the conflict
+		// is rooted in a block, which ResolveTypeNameConflicts cannot currently
+		// rename (see issue #17). Walk the subtree so each descendant reaches
+		// its own comparison and a divergence is reported rather than dropped.
+		//
+		// The sentinel is reinstated for the walk so that a self-referential
+		// subtree still terminates, and restored afterwards.
+		generated[name] = nil
+
+		children, err := renderChildren()
+
+		generated[name] = prev
+
+		if err != nil {
+			return nil, err
+		}
+
+		// Normally empty: every descendant was emitted by the first occurrence
+		// and dedupes away here. Anything the walk does turn out to be the first
+		// to render is returned rather than dropped, so the declaration cannot
+		// be recorded without also being emitted.
+		if len(children) == 0 {
+			return nil, nil
+		}
+
+		return children, nil
 	}
 
 	// Guard against a descendant reaching this name again while children render.
