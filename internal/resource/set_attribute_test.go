@@ -450,7 +450,7 @@ func TestGeneratorSetAttribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &resource.SetAttribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
@@ -463,7 +463,7 @@ func TestGeneratorSetAttribute_New(t *testing.T) {
 					"types.StringType",
 					"name",
 				),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
@@ -476,7 +476,7 @@ func TestGeneratorSetAttribute_New(t *testing.T) {
 		},
 		"description": {
 			input: &resource.SetAttribute{
-				Description: pointer("description"),
+				Description: new("description"),
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
@@ -489,7 +489,7 @@ func TestGeneratorSetAttribute_New(t *testing.T) {
 					"types.StringType",
 					"name",
 				),
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
@@ -505,7 +505,7 @@ func TestGeneratorSetAttribute_New(t *testing.T) {
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorSetAttribute{
 				CustomType: convert.NewCustomTypeCollection(
@@ -521,7 +521,7 @@ func TestGeneratorSetAttribute_New(t *testing.T) {
 				ElementTypeCollection: convert.NewElementType(specschema.ElementType{
 					String: &specschema.StringType{},
 				}),
-				Sensitive:     convert.NewSensitive(pointer(true)),
+				Sensitive:     convert.NewSensitive(new(true)),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeSet, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeSet, specschema.CustomValidators{}),
 			},
@@ -1611,7 +1611,7 @@ Computed: true,
 				ElementTypeCollection: convert.NewElementType(specschema.ElementType{
 					String: &specschema.StringType{},
 				}),
-				Sensitive: convert.NewSensitive(pointer(true)),
+				Sensitive: convert.NewSensitive(new(true)),
 			},
 			expected: `"set_attribute": schema.SetAttribute{
 ElementType: types.StringType,
@@ -1622,7 +1622,7 @@ Sensitive: true,
 		// TODO: Do we need separate description and markdown description?
 		"description": {
 			input: GeneratorSetAttribute{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				ElementTypeCollection: convert.NewElementType(specschema.ElementType{
 					String: &specschema.StringType{},
 				}),
@@ -1636,7 +1636,7 @@ MarkdownDescription: "description",
 
 		"deprecation-message": {
 			input: GeneratorSetAttribute{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 				ElementTypeCollection: convert.NewElementType(specschema.ElementType{
 					String: &specschema.StringType{},
 				}),

@@ -195,7 +195,7 @@ func (g GeneratorListNestedAttribute) GetAttributes() schema.GeneratorAttributes
 }
 
 func (g GeneratorListNestedAttribute) CustomTypeAndValue(name string, generated map[string][]byte) ([]byte, error) {
-	return schema.DedupeGenerated(name, generated, func() ([]byte, error) {
+	renderDecl := func() ([]byte, error) {
 		var buf bytes.Buffer
 
 		attributeAttrValues, err := g.NestedObject.Attributes.AttrValues()
@@ -242,6 +242,12 @@ func (g GeneratorListNestedAttribute) CustomTypeAndValue(name string, generated 
 
 		buf.Write(b)
 
+		return buf.Bytes(), nil
+	}
+
+	renderChildren := func() ([]byte, error) {
+		var buf bytes.Buffer
+
 		attributeKeys := g.NestedObject.Attributes.SortedKeys()
 
 		// Recursively call CustomTypeAndValue() for each attribute that implements
@@ -268,7 +274,9 @@ func (g GeneratorListNestedAttribute) CustomTypeAndValue(name string, generated 
 		}
 
 		return buf.Bytes(), nil
-	})
+	}
+
+	return schema.DedupeGenerated(name, generated, renderDecl, renderChildren)
 }
 
 func (g GeneratorListNestedAttribute) ToFromFunctions(name string) ([]byte, error) {

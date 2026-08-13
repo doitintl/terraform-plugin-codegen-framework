@@ -32,7 +32,7 @@ func Test_NewSchemas(t *testing.T) {
 								Name: "bool_attribute",
 								Bool: &provider.BoolAttribute{
 									OptionalRequired: "optional",
-									Sensitive:        pointer(true),
+									Sensitive:        new(true),
 								},
 							},
 							{
@@ -182,7 +182,7 @@ func Test_NewSchemas(t *testing.T) {
 						"bool_attribute": GeneratorBoolAttribute{
 							OptionalRequired: convert.NewOptionalRequired(specschema.Optional),
 							CustomType:       convert.NewCustomTypePrimitive(nil, nil, "bool_attribute"),
-							Sensitive:        convert.NewSensitive(pointer(true)),
+							Sensitive:        convert.NewSensitive(new(true)),
 							Validators:       convert.NewValidators(convert.ValidatorTypeBool, specschema.CustomValidators{}),
 						},
 						"list_attribute": GeneratorListAttribute{

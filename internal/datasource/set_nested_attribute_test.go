@@ -470,10 +470,10 @@ func TestGeneratorSetNestedAttribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &datasource.SetNestedAttribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorSetNestedAttribute{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				NestedObject: GeneratorNestedAttributeObject{
 					Attributes: attributes,
 				},
@@ -488,10 +488,10 @@ func TestGeneratorSetNestedAttribute_New(t *testing.T) {
 		},
 		"description": {
 			input: &datasource.SetNestedAttribute{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorSetNestedAttribute{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				NestedObject: GeneratorNestedAttributeObject{
 					Attributes: attributes,
 				},
@@ -506,7 +506,7 @@ func TestGeneratorSetNestedAttribute_New(t *testing.T) {
 		},
 		"sensitive": {
 			input: &datasource.SetNestedAttribute{
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorSetNestedAttribute{
 				NestedObject: GeneratorNestedAttributeObject{
@@ -518,7 +518,7 @@ func TestGeneratorSetNestedAttribute_New(t *testing.T) {
 					convert.NewValidators(convert.ValidatorTypeObject, nil),
 					"name",
 				),
-				Sensitive:  convert.NewSensitive(pointer(true)),
+				Sensitive:  convert.NewSensitive(new(true)),
 				Validators: convert.NewValidators(convert.ValidatorTypeSet, nil),
 			},
 		},
@@ -1504,7 +1504,7 @@ Computed: true,
 					convert.Validators{},
 					attributeName,
 				),
-				Sensitive: convert.NewSensitive(pointer(true)),
+				Sensitive: convert.NewSensitive(new(true)),
 			},
 			expected: `"set_nested_attribute": schema.SetNestedAttribute{
 NestedObject: schema.NestedAttributeObject{
@@ -1522,7 +1522,7 @@ Sensitive: true,
 
 		"description": {
 			input: GeneratorSetNestedAttribute{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				NestedAttributeObject: convert.NewNestedAttributeObject(
 					generatorschema.GeneratorAttributes{},
 					nil,
@@ -1547,7 +1547,7 @@ MarkdownDescription: "description",
 
 		"deprecation-message": {
 			input: GeneratorSetNestedAttribute{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 				NestedAttributeObject: convert.NewNestedAttributeObject(
 					generatorschema.GeneratorAttributes{},
 					nil,

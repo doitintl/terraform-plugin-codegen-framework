@@ -90,31 +90,31 @@ func TestGeneratorFloat64Attribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &datasource.Float64Attribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorFloat64Attribute{
 				CustomType:         convert.NewCustomTypePrimitive(nil, nil, "name"),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				Validators:         convert.NewValidators(convert.ValidatorTypeFloat64, specschema.CustomValidators{}),
 			},
 		},
 		"description": {
 			input: &datasource.Float64Attribute{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorFloat64Attribute{
 				CustomType:  convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				Validators:  convert.NewValidators(convert.ValidatorTypeFloat64, specschema.CustomValidators{}),
 			},
 		},
 		"sensitive": {
 			input: &datasource.Float64Attribute{
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorFloat64Attribute{
 				CustomType: convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Sensitive:  convert.NewSensitive(pointer(true)),
+				Sensitive:  convert.NewSensitive(new(true)),
 				Validators: convert.NewValidators(convert.ValidatorTypeFloat64, specschema.CustomValidators{}),
 			},
 		},
@@ -251,7 +251,7 @@ Computed: true,
 
 		"sensitive": {
 			input: GeneratorFloat64Attribute{
-				Sensitive: convert.NewSensitive(pointer(true)),
+				Sensitive: convert.NewSensitive(new(true)),
 			},
 			expected: `"float64_attribute": schema.Float64Attribute{
 Sensitive: true,
@@ -261,7 +261,7 @@ Sensitive: true,
 		// TODO: Do we need separate description and markdown description?
 		"description": {
 			input: GeneratorFloat64Attribute{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 			},
 			expected: `"float64_attribute": schema.Float64Attribute{
 Description: "description",
@@ -271,7 +271,7 @@ MarkdownDescription: "description",
 
 		"deprecation-message": {
 			input: GeneratorFloat64Attribute{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 			},
 			expected: `"float64_attribute": schema.Float64Attribute{
 DeprecationMessage: "deprecated",

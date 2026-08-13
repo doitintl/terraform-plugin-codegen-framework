@@ -8,24 +8,11 @@ project {
     # internal catalog metadata (prose)
     "META.d/**/*.yaml",
 
-    # changie tooling configuration and CHANGELOG entries (prose)
-    ".changes/unreleased/*.yaml",
-    ".changie.yaml",
-
     # GitHub issue template configuration
     ".github/ISSUE_TEMPLATE/*.yml",
 
-    # GitHub Actions workflow-specific configurations
-    ".github/labeler-*.yml",
-
     # golangci-lint tooling configuration
     ".golangci.yml",
-
-    # GoReleaser tooling configuration
-    ".goreleaser.yml",
-
-    # Release Engineering tooling configuration
-    ".release/*.hcl",
 
     # Ignore testdata files
     "internal/cmd/testdata/**",

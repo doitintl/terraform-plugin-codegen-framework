@@ -10,7 +10,19 @@ fmt:
 test:
 	go test $$(go list ./... | grep -v /output) -v -cover -timeout=120s -parallel=4
 
-# Generate copywrite headers
+# Generate copywrite headers.
+#
+# Do not run this without checking what it would do first (append --plan to the
+# go:generate directive in tools/copywrite.go). It generates no code -- it only
+# stamps license headers -- and current copywrite releases default the copyright
+# holder to "IBM Corp." following the HashiCorp acquisition, so running it here
+# rewrites the header of every file in the repo. This fork keeps the upstream
+# HashiCorp MPL-2.0 notices; new files should copy the two-line header from a
+# neighbouring file by hand.
+#
+# The target also does not build as-is: this module's resolved knadh/koanf
+# versions are incompatible with copywrite v0.25.3. Invoking copywrite with its
+# own pins (go run github.com/hashicorp/copywrite@v0.25.3) works around that.
 generate:
 	cd tools; go generate ./...
 
@@ -39,6 +51,11 @@ testdata:
 		--input ./internal/cmd/testdata/sibling_collision/ir.json \
 		--package generated \
 		--output ./internal/cmd/testdata/sibling_collision/data_sources_output
+
+	go run ./cmd/tfplugingen-framework generate data-sources \
+		--input ./internal/cmd/testdata/shared_nested_subtree/ir.json \
+		--package generated \
+		--output ./internal/cmd/testdata/shared_nested_subtree/data_sources_output
 
 	go run ./cmd/tfplugingen-framework generate provider \
 		--input ./internal/cmd/testdata/custom_and_external/ir.json \

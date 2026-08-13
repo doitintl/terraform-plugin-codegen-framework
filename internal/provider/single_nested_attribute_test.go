@@ -283,34 +283,34 @@ func TestGeneratorSingleNestedAttribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &provider.SingleNestedAttribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorSingleNestedAttribute{
 				Attributes:         attributes,
 				CustomType:         convert.NewCustomTypeNestedObject(nil, "name"),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				Validators:         convert.NewValidators(convert.ValidatorTypeObject, specschema.CustomValidators{}),
 			},
 		},
 		"description": {
 			input: &provider.SingleNestedAttribute{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorSingleNestedAttribute{
 				Attributes:  attributes,
 				CustomType:  convert.NewCustomTypeNestedObject(nil, "name"),
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				Validators:  convert.NewValidators(convert.ValidatorTypeObject, specschema.CustomValidators{}),
 			},
 		},
 		"sensitive": {
 			input: &provider.SingleNestedAttribute{
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorSingleNestedAttribute{
 				Attributes: attributes,
 				CustomType: convert.NewCustomTypeNestedObject(nil, "name"),
-				Sensitive:  convert.NewSensitive(pointer(true)),
+				Sensitive:  convert.NewSensitive(new(true)),
 				Validators: convert.NewValidators(convert.ValidatorTypeObject, specschema.CustomValidators{}),
 			},
 		},
@@ -951,7 +951,7 @@ Optional: true,
 		"sensitive": {
 			input: GeneratorSingleNestedAttribute{
 				CustomType: convert.NewCustomTypeNestedObject(nil, attributeName),
-				Sensitive:  convert.NewSensitive(pointer(true)),
+				Sensitive:  convert.NewSensitive(new(true)),
 			},
 			expected: `"single_nested_attribute": schema.SingleNestedAttribute{
 Attributes: map[string]schema.Attribute{
@@ -968,7 +968,7 @@ Sensitive: true,
 		"description": {
 			input: GeneratorSingleNestedAttribute{
 				CustomType:  convert.NewCustomTypeNestedObject(nil, attributeName),
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 			},
 			expected: `"single_nested_attribute": schema.SingleNestedAttribute{
 Attributes: map[string]schema.Attribute{
@@ -986,7 +986,7 @@ MarkdownDescription: "description",
 		"deprecation-message": {
 			input: GeneratorSingleNestedAttribute{
 				CustomType:         convert.NewCustomTypeNestedObject(nil, attributeName),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 			},
 			expected: `"single_nested_attribute": schema.SingleNestedAttribute{
 Attributes: map[string]schema.Attribute{

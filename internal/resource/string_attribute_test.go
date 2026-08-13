@@ -96,33 +96,33 @@ func TestGeneratorStringAttribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &resource.StringAttribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorStringAttribute{
 				CustomType:         convert.NewCustomTypePrimitive(nil, nil, "name"),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				PlanModifiers:      convert.NewPlanModifiers(convert.PlanModifierTypeString, specschema.CustomPlanModifiers{}),
 				Validators:         convert.NewValidators(convert.ValidatorTypeString, specschema.CustomValidators{}),
 			},
 		},
 		"description": {
 			input: &resource.StringAttribute{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorStringAttribute{
 				CustomType:    convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Description:   convert.NewDescription(pointer("description")),
+				Description:   convert.NewDescription(new("description")),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeString, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeString, specschema.CustomValidators{}),
 			},
 		},
 		"sensitive": {
 			input: &resource.StringAttribute{
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorStringAttribute{
 				CustomType:    convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Sensitive:     convert.NewSensitive(pointer(true)),
+				Sensitive:     convert.NewSensitive(new(true)),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeString, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeString, specschema.CustomValidators{}),
 			},
@@ -198,7 +198,7 @@ func TestGeneratorStringAttribute_New(t *testing.T) {
 						},
 						SchemaDefinition: "my_default.Default()",
 					},
-					Static: pointer("str"),
+					Static: new("str"),
 				},
 			},
 			expected: GeneratorStringAttribute{
@@ -212,7 +212,7 @@ func TestGeneratorStringAttribute_New(t *testing.T) {
 						},
 						SchemaDefinition: "my_default.Default()",
 					},
-					Static: pointer("str"),
+					Static: new("str"),
 				}),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeString, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeString, specschema.CustomValidators{}),
@@ -510,7 +510,7 @@ func TestGeneratorStringAttribute_Imports(t *testing.T) {
 		"default-static": {
 			input: GeneratorStringAttribute{
 				Default: convert.NewDefaultString(&specschema.StringDefault{
-					Static: pointer("str"),
+					Static: new("str"),
 				}),
 			},
 			expected: []code.Import{
@@ -730,7 +730,7 @@ Computed: true,
 
 		"sensitive": {
 			input: GeneratorStringAttribute{
-				Sensitive: convert.NewSensitive(pointer(true)),
+				Sensitive: convert.NewSensitive(new(true)),
 			},
 			expected: `"string_attribute": schema.StringAttribute{
 Sensitive: true,
@@ -740,7 +740,7 @@ Sensitive: true,
 		// TODO: Do we need separate description and markdown description?
 		"description": {
 			input: GeneratorStringAttribute{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 			},
 			expected: `"string_attribute": schema.StringAttribute{
 Description: "description",
@@ -750,7 +750,7 @@ MarkdownDescription: "description",
 
 		"deprecation-message": {
 			input: GeneratorStringAttribute{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 			},
 			expected: `"string_attribute": schema.StringAttribute{
 DeprecationMessage: "deprecated",
@@ -798,7 +798,7 @@ my_other_plan_modifier.Modify(),
 		"default-static": {
 			input: GeneratorStringAttribute{
 				Default: convert.NewDefaultString(&specschema.StringDefault{
-					Static: pointer("str"),
+					Static: new("str"),
 				}),
 			},
 			expected: `"string_attribute": schema.StringAttribute{

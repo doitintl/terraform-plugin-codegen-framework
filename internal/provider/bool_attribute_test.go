@@ -81,31 +81,31 @@ func TestGeneratorBoolAttribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &provider.BoolAttribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorBoolAttribute{
 				CustomType:         convert.NewCustomTypePrimitive(nil, nil, "name"),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				Validators:         convert.NewValidators(convert.ValidatorTypeBool, specschema.CustomValidators{}),
 			},
 		},
 		"description": {
 			input: &provider.BoolAttribute{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorBoolAttribute{
 				CustomType:  convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				Validators:  convert.NewValidators(convert.ValidatorTypeBool, specschema.CustomValidators{}),
 			},
 		},
 		"sensitive": {
 			input: &provider.BoolAttribute{
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorBoolAttribute{
 				CustomType: convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Sensitive:  convert.NewSensitive(pointer(true)),
+				Sensitive:  convert.NewSensitive(new(true)),
 				Validators: convert.NewValidators(convert.ValidatorTypeBool, specschema.CustomValidators{}),
 			},
 		},
@@ -481,7 +481,7 @@ Optional: true,
 
 		"sensitive": {
 			input: GeneratorBoolAttribute{
-				Sensitive: convert.NewSensitive(pointer(true)),
+				Sensitive: convert.NewSensitive(new(true)),
 			},
 			expected: `"bool_attribute": schema.BoolAttribute{
 Sensitive: true,
@@ -491,7 +491,7 @@ Sensitive: true,
 		// TODO: Do we need separate description and markdown description?
 		"description": {
 			input: GeneratorBoolAttribute{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 			},
 			expected: `"bool_attribute": schema.BoolAttribute{
 Description: "description",
@@ -501,7 +501,7 @@ MarkdownDescription: "description",
 
 		"deprecation-message": {
 			input: GeneratorBoolAttribute{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 			},
 			expected: `"bool_attribute": schema.BoolAttribute{
 DeprecationMessage: "deprecated",
@@ -636,8 +636,4 @@ func TestGeneratorBoolAttribute_ModelField(t *testing.T) {
 			}
 		})
 	}
-}
-
-func pointer[T any](in T) *T {
-	return &in
 }

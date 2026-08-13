@@ -438,7 +438,7 @@ func TestGeneratorListAttribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &datasource.ListAttribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
@@ -451,7 +451,7 @@ func TestGeneratorListAttribute_New(t *testing.T) {
 					"types.StringType",
 					"name",
 				),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
@@ -463,7 +463,7 @@ func TestGeneratorListAttribute_New(t *testing.T) {
 		},
 		"description": {
 			input: &datasource.ListAttribute{
-				Description: pointer("description"),
+				Description: new("description"),
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
@@ -476,7 +476,7 @@ func TestGeneratorListAttribute_New(t *testing.T) {
 					"types.StringType",
 					"name",
 				),
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
@@ -491,7 +491,7 @@ func TestGeneratorListAttribute_New(t *testing.T) {
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorListAttribute{
 				CustomType: convert.NewCustomTypeCollection(
@@ -507,7 +507,7 @@ func TestGeneratorListAttribute_New(t *testing.T) {
 				ElementTypeCollection: convert.NewElementType(specschema.ElementType{
 					String: &specschema.StringType{},
 				}),
-				Sensitive:  convert.NewSensitive(pointer(true)),
+				Sensitive:  convert.NewSensitive(new(true)),
 				Validators: convert.NewValidators(convert.ValidatorTypeList, specschema.CustomValidators{}),
 			},
 		},
@@ -1363,7 +1363,7 @@ Computed: true,
 				ElementTypeCollection: convert.NewElementType(specschema.ElementType{
 					String: &specschema.StringType{},
 				}),
-				Sensitive: convert.NewSensitive(pointer(true)),
+				Sensitive: convert.NewSensitive(new(true)),
 			},
 			expected: `"list_attribute": schema.ListAttribute{
 ElementType: types.StringType,
@@ -1373,7 +1373,7 @@ Sensitive: true,
 
 		"description": {
 			input: GeneratorListAttribute{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				ElementTypeCollection: convert.NewElementType(specschema.ElementType{
 					String: &specschema.StringType{},
 				}),
@@ -1387,7 +1387,7 @@ MarkdownDescription: "description",
 
 		"deprecation-message": {
 			input: GeneratorListAttribute{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 				ElementTypeCollection: convert.NewElementType(specschema.ElementType{
 					String: &specschema.StringType{},
 				}),

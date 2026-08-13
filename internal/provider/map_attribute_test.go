@@ -387,7 +387,7 @@ func TestGeneratorMapAttribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &provider.MapAttribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
@@ -400,7 +400,7 @@ func TestGeneratorMapAttribute_New(t *testing.T) {
 					"types.StringType",
 					"name",
 				),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
@@ -412,7 +412,7 @@ func TestGeneratorMapAttribute_New(t *testing.T) {
 		},
 		"description": {
 			input: &provider.MapAttribute{
-				Description: pointer("description"),
+				Description: new("description"),
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
@@ -425,7 +425,7 @@ func TestGeneratorMapAttribute_New(t *testing.T) {
 					"types.StringType",
 					"name",
 				),
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
@@ -440,7 +440,7 @@ func TestGeneratorMapAttribute_New(t *testing.T) {
 				ElementType: specschema.ElementType{
 					String: &specschema.StringType{},
 				},
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorMapAttribute{
 				CustomType: convert.NewCustomTypeCollection(
@@ -456,7 +456,7 @@ func TestGeneratorMapAttribute_New(t *testing.T) {
 				ElementTypeCollection: convert.NewElementType(specschema.ElementType{
 					String: &specschema.StringType{},
 				}),
-				Sensitive:  convert.NewSensitive(pointer(true)),
+				Sensitive:  convert.NewSensitive(new(true)),
 				Validators: convert.NewValidators(convert.ValidatorTypeMap, specschema.CustomValidators{}),
 			},
 		},
@@ -861,7 +861,7 @@ Optional: true,
 				ElementTypeCollection: convert.NewElementType(specschema.ElementType{
 					String: &specschema.StringType{},
 				}),
-				Sensitive: convert.NewSensitive(pointer(true)),
+				Sensitive: convert.NewSensitive(new(true)),
 			},
 			expected: `"map_attribute": schema.MapAttribute{
 ElementType: types.StringType,
@@ -871,7 +871,7 @@ Sensitive: true,
 
 		"description": {
 			input: GeneratorMapAttribute{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				ElementTypeCollection: convert.NewElementType(specschema.ElementType{
 					String: &specschema.StringType{},
 				}),
@@ -885,7 +885,7 @@ MarkdownDescription: "description",
 
 		"deprecation-message": {
 			input: GeneratorMapAttribute{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 				ElementTypeCollection: convert.NewElementType(specschema.ElementType{
 					String: &specschema.StringType{},
 				}),
