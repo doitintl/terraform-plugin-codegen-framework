@@ -70,31 +70,31 @@ func TestGeneratorInt64Attribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &provider.Int64Attribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorInt64Attribute{
 				CustomType:         convert.NewCustomTypePrimitive(nil, nil, "name"),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				Validators:         convert.NewValidators(convert.ValidatorTypeInt64, specschema.CustomValidators{}),
 			},
 		},
 		"description": {
 			input: &provider.Int64Attribute{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorInt64Attribute{
 				CustomType:  convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				Validators:  convert.NewValidators(convert.ValidatorTypeInt64, specschema.CustomValidators{}),
 			},
 		},
 		"sensitive": {
 			input: &provider.Int64Attribute{
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorInt64Attribute{
 				CustomType: convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Sensitive:  convert.NewSensitive(pointer(true)),
+				Sensitive:  convert.NewSensitive(new(true)),
 				Validators: convert.NewValidators(convert.ValidatorTypeInt64, specschema.CustomValidators{}),
 			},
 		},
@@ -222,7 +222,7 @@ Optional: true,
 
 		"sensitive": {
 			input: GeneratorInt64Attribute{
-				Sensitive: convert.NewSensitive(pointer(true)),
+				Sensitive: convert.NewSensitive(new(true)),
 			},
 			expected: `"int64_attribute": schema.Int64Attribute{
 Sensitive: true,
@@ -232,7 +232,7 @@ Sensitive: true,
 		// TODO: Do we need separate description and markdown description?
 		"description": {
 			input: GeneratorInt64Attribute{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 			},
 			expected: `"int64_attribute": schema.Int64Attribute{
 Description: "description",
@@ -242,7 +242,7 @@ MarkdownDescription: "description",
 
 		"deprecation-message": {
 			input: GeneratorInt64Attribute{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 			},
 			expected: `"int64_attribute": schema.Int64Attribute{
 DeprecationMessage: "deprecated",

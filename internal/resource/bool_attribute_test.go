@@ -96,34 +96,34 @@ func TestGeneratorBoolAttribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &resource.BoolAttribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorBoolAttribute{
 				CustomType:         convert.NewCustomTypePrimitive(nil, nil, "name"),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				PlanModifiers:      convert.NewPlanModifiers(convert.PlanModifierTypeBool, specschema.CustomPlanModifiers{}),
 				Validators:         convert.NewValidators(convert.ValidatorTypeBool, specschema.CustomValidators{}),
 			},
 		},
 		"description": {
 			input: &resource.BoolAttribute{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorBoolAttribute{
 				CustomType:    convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Description:   convert.NewDescription(pointer("description")),
+				Description:   convert.NewDescription(new("description")),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeBool, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeBool, specschema.CustomValidators{}),
 			},
 		},
 		"sensitive": {
 			input: &resource.BoolAttribute{
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorBoolAttribute{
 				CustomType:    convert.NewCustomTypePrimitive(nil, nil, "name"),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeBool, specschema.CustomPlanModifiers{}),
-				Sensitive:     convert.NewSensitive(pointer(true)),
+				Sensitive:     convert.NewSensitive(new(true)),
 				Validators:    convert.NewValidators(convert.ValidatorTypeBool, specschema.CustomValidators{}),
 			},
 		},
@@ -198,7 +198,7 @@ func TestGeneratorBoolAttribute_New(t *testing.T) {
 						},
 						SchemaDefinition: "my_default.Default()",
 					},
-					Static: pointer(true),
+					Static: new(true),
 				},
 			},
 			expected: GeneratorBoolAttribute{
@@ -212,7 +212,7 @@ func TestGeneratorBoolAttribute_New(t *testing.T) {
 						},
 						SchemaDefinition: "my_default.Default()",
 					},
-					Static: pointer(true),
+					Static: new(true),
 				}),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeBool, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeBool, specschema.CustomValidators{}),
@@ -510,7 +510,7 @@ func TestGeneratorBoolAttribute_Imports(t *testing.T) {
 		"default-static": {
 			input: GeneratorBoolAttribute{
 				Default: convert.NewDefaultBool(&specschema.BoolDefault{
-					Static: pointer(true),
+					Static: new(true),
 				}),
 			},
 			expected: []code.Import{
@@ -730,7 +730,7 @@ Computed: true,
 
 		"sensitive": {
 			input: GeneratorBoolAttribute{
-				Sensitive: convert.NewSensitive(pointer(true)),
+				Sensitive: convert.NewSensitive(new(true)),
 			},
 			expected: `"bool_attribute": schema.BoolAttribute{
 Sensitive: true,
@@ -740,7 +740,7 @@ Sensitive: true,
 		// TODO: Do we need separate description and markdown description?
 		"description": {
 			input: GeneratorBoolAttribute{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 			},
 			expected: `"bool_attribute": schema.BoolAttribute{
 Description: "description",
@@ -750,7 +750,7 @@ MarkdownDescription: "description",
 
 		"deprecation-message": {
 			input: GeneratorBoolAttribute{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 			},
 			expected: `"bool_attribute": schema.BoolAttribute{
 DeprecationMessage: "deprecated",
@@ -798,7 +798,7 @@ my_other_plan_modifier.Modify(),
 		"default-static": {
 			input: GeneratorBoolAttribute{
 				Default: convert.NewDefaultBool(&specschema.BoolDefault{
-					Static: pointer(true),
+					Static: new(true),
 				}),
 			},
 			expected: `"bool_attribute": schema.BoolAttribute{
@@ -921,10 +921,6 @@ func TestGeneratorBoolAttribute_ModelField(t *testing.T) {
 			}
 		})
 	}
-}
-
-func pointer[T any](in T) *T {
-	return &in
 }
 
 var equateErrorMessage = cmp.Comparer(func(x, y error) bool {

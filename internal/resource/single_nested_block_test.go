@@ -382,22 +382,22 @@ func TestGeneratorSingleNestedBlock_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &resource.SingleNestedBlock{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorSingleNestedBlock{
 				CustomType:         convert.NewCustomTypeNestedObject(nil, "name"),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				PlanModifiers:      convert.NewPlanModifiers(convert.PlanModifierTypeObject, specschema.CustomPlanModifiers{}),
 				Validators:         convert.NewValidators(convert.ValidatorTypeObject, specschema.CustomValidators{}),
 			},
 		},
 		"description": {
 			input: &resource.SingleNestedBlock{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorSingleNestedBlock{
 				CustomType:    convert.NewCustomTypeNestedObject(nil, "name"),
-				Description:   convert.NewDescription(pointer("description")),
+				Description:   convert.NewDescription(new("description")),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeObject, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeObject, specschema.CustomValidators{}),
 			},
@@ -1170,7 +1170,7 @@ CustomType: my_custom_type,
 		"description": {
 			input: GeneratorSingleNestedBlock{
 				CustomType:  convert.NewCustomTypeNestedObject(nil, blockName),
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 			},
 			expected: `"single_nested_block": schema.SingleNestedBlock{
 CustomType: SingleNestedBlockType{
@@ -1186,7 +1186,7 @@ MarkdownDescription: "description",
 		"deprecation-message": {
 			input: GeneratorSingleNestedBlock{
 				CustomType:         convert.NewCustomTypeNestedObject(nil, blockName),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 			},
 			expected: `"single_nested_block": schema.SingleNestedBlock{
 CustomType: SingleNestedBlockType{

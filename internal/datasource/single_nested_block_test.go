@@ -359,21 +359,21 @@ func TestGeneratorSingleNestedBlock_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &datasource.SingleNestedBlock{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorSingleNestedBlock{
 				CustomType:         convert.NewCustomTypeNestedObject(nil, "name"),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				Validators:         convert.NewValidators(convert.ValidatorTypeObject, specschema.CustomValidators{}),
 			},
 		},
 		"description": {
 			input: &datasource.SingleNestedBlock{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorSingleNestedBlock{
 				CustomType:  convert.NewCustomTypeNestedObject(nil, "name"),
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				Validators:  convert.NewValidators(convert.ValidatorTypeObject, specschema.CustomValidators{}),
 			},
 		},
@@ -1075,7 +1075,7 @@ CustomType: my_custom_type,
 		"description": {
 			input: GeneratorSingleNestedBlock{
 				CustomType:  convert.NewCustomTypeNestedObject(nil, blockName),
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 			},
 			expected: `"single_nested_block": schema.SingleNestedBlock{
 CustomType: SingleNestedBlockType{
@@ -1091,7 +1091,7 @@ MarkdownDescription: "description",
 		"deprecation-message": {
 			input: GeneratorSingleNestedBlock{
 				CustomType:         convert.NewCustomTypeNestedObject(nil, blockName),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 			},
 			expected: `"single_nested_block": schema.SingleNestedBlock{
 CustomType: SingleNestedBlockType{

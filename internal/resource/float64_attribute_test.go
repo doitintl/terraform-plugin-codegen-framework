@@ -96,33 +96,33 @@ func TestGeneratorFloat64Attribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &resource.Float64Attribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorFloat64Attribute{
 				CustomType:         convert.NewCustomTypePrimitive(nil, nil, "name"),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				PlanModifiers:      convert.NewPlanModifiers(convert.PlanModifierTypeFloat64, specschema.CustomPlanModifiers{}),
 				Validators:         convert.NewValidators(convert.ValidatorTypeFloat64, specschema.CustomValidators{}),
 			},
 		},
 		"description": {
 			input: &resource.Float64Attribute{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorFloat64Attribute{
 				CustomType:    convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Description:   convert.NewDescription(pointer("description")),
+				Description:   convert.NewDescription(new("description")),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeFloat64, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeFloat64, specschema.CustomValidators{}),
 			},
 		},
 		"sensitive": {
 			input: &resource.Float64Attribute{
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorFloat64Attribute{
 				CustomType:    convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Sensitive:     convert.NewSensitive(pointer(true)),
+				Sensitive:     convert.NewSensitive(new(true)),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeFloat64, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeFloat64, specschema.CustomValidators{}),
 			},
@@ -198,7 +198,7 @@ func TestGeneratorFloat64Attribute_New(t *testing.T) {
 						},
 						SchemaDefinition: "my_default.Default()",
 					},
-					Static: pointer(1.234),
+					Static: new(1.234),
 				},
 			},
 			expected: GeneratorFloat64Attribute{
@@ -212,7 +212,7 @@ func TestGeneratorFloat64Attribute_New(t *testing.T) {
 						},
 						SchemaDefinition: "my_default.Default()",
 					},
-					Static: pointer(1.234),
+					Static: new(1.234),
 				}),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeFloat64, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeFloat64, specschema.CustomValidators{}),
@@ -510,7 +510,7 @@ func TestGeneratorFloat64Attribute_Imports(t *testing.T) {
 		"default-static": {
 			input: GeneratorFloat64Attribute{
 				Default: convert.NewDefaultFloat64(&specschema.Float64Default{
-					Static: pointer(1.234),
+					Static: new(1.234),
 				}),
 			},
 			expected: []code.Import{
@@ -730,7 +730,7 @@ Computed: true,
 
 		"sensitive": {
 			input: GeneratorFloat64Attribute{
-				Sensitive: convert.NewSensitive(pointer(true)),
+				Sensitive: convert.NewSensitive(new(true)),
 			},
 			expected: `"float64_attribute": schema.Float64Attribute{
 Sensitive: true,
@@ -740,7 +740,7 @@ Sensitive: true,
 		// TODO: Do we need separate description and markdown description?
 		"description": {
 			input: GeneratorFloat64Attribute{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 			},
 			expected: `"float64_attribute": schema.Float64Attribute{
 Description: "description",
@@ -750,7 +750,7 @@ MarkdownDescription: "description",
 
 		"deprecation-message": {
 			input: GeneratorFloat64Attribute{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 			},
 			expected: `"float64_attribute": schema.Float64Attribute{
 DeprecationMessage: "deprecated",
@@ -798,7 +798,7 @@ my_other_plan_modifier.Modify(),
 		"default-static": {
 			input: GeneratorFloat64Attribute{
 				Default: convert.NewDefaultFloat64(&specschema.Float64Default{
-					Static: pointer(1.234),
+					Static: new(1.234),
 				}),
 			},
 			expected: `"float64_attribute": schema.Float64Attribute{

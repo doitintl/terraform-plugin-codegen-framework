@@ -8,6 +8,8 @@ import (
 )
 
 func TestDescription_AppendValidators(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		name         string
 		initialDesc  *string
@@ -26,7 +28,7 @@ func TestDescription_AppendValidators(t *testing.T) {
 		},
 		{
 			name:        "Existing description, simple OneOf",
-			initialDesc: stringPtr("Some description."),
+			initialDesc: new("Some description."),
 			validators: NewValidators(ValidatorTypeString, specschema.CustomValidators{
 				{
 					SchemaDefinition: `stringvalidator.OneOf("foo", "bar")`,
@@ -36,7 +38,7 @@ func TestDescription_AppendValidators(t *testing.T) {
 		},
 		{
 			name:        "Multiline OneOf",
-			initialDesc: stringPtr("Desc"),
+			initialDesc: new("Desc"),
 			validators: NewValidators(ValidatorTypeString, specschema.CustomValidators{
 				{
 					SchemaDefinition: `stringvalidator.OneOf(
@@ -49,7 +51,7 @@ func TestDescription_AppendValidators(t *testing.T) {
 		},
 		{
 			name:        "Commas inside quotes",
-			initialDesc: stringPtr("Desc"),
+			initialDesc: new("Desc"),
 			validators: NewValidators(ValidatorTypeString, specschema.CustomValidators{
 				{
 					SchemaDefinition: `stringvalidator.OneOf("a,b", "c")`,
@@ -59,7 +61,7 @@ func TestDescription_AppendValidators(t *testing.T) {
 		},
 		{
 			name:        "No OneOf",
-			initialDesc: stringPtr("Desc"),
+			initialDesc: new("Desc"),
 			validators: NewValidators(ValidatorTypeString, specschema.CustomValidators{
 				{
 					SchemaDefinition: `stringvalidator.LengthAtLeast(1)`,
@@ -69,7 +71,7 @@ func TestDescription_AppendValidators(t *testing.T) {
 		},
 		{
 			name:        "Multiple OneOf (should append both)",
-			initialDesc: stringPtr("Desc"),
+			initialDesc: new("Desc"),
 			validators: NewValidators(ValidatorTypeString, specschema.CustomValidators{
 				{
 					SchemaDefinition: `stringvalidator.OneOf("a", "b")`,
@@ -85,6 +87,8 @@ func TestDescription_AppendValidators(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			d := NewDescription(tt.initialDesc)
 			d.AppendValidators(tt.validators)
 
@@ -94,8 +98,4 @@ func TestDescription_AppendValidators(t *testing.T) {
 			}
 		})
 	}
-}
-
-func stringPtr(s string) *string {
-	return &s
 }

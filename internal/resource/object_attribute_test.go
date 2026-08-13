@@ -355,32 +355,32 @@ func TestGeneratorObjectAttribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &resource.ObjectAttribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorObjectAttribute{
 				CustomType:         convert.NewCustomTypeObject(nil, nil, "name"),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				PlanModifiers:      convert.NewPlanModifiers(convert.PlanModifierTypeObject, specschema.CustomPlanModifiers{}),
 				Validators:         convert.NewValidators(convert.ValidatorTypeObject, specschema.CustomValidators{})},
 		},
 		"description": {
 			input: &resource.ObjectAttribute{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorObjectAttribute{
 				CustomType:    convert.NewCustomTypeObject(nil, nil, "name"),
-				Description:   convert.NewDescription(pointer("description")),
+				Description:   convert.NewDescription(new("description")),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeObject, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeObject, specschema.CustomValidators{}),
 			},
 		},
 		"sensitive": {
 			input: &resource.ObjectAttribute{
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorObjectAttribute{
 				CustomType:    convert.NewCustomTypeObject(nil, nil, "name"),
-				Sensitive:     convert.NewSensitive(pointer(true)),
+				Sensitive:     convert.NewSensitive(new(true)),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeObject, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeObject, specschema.CustomValidators{}),
 			},
@@ -1536,7 +1536,7 @@ Computed: true,
 						String: &specschema.StringType{},
 					},
 				}),
-				Sensitive:  convert.NewSensitive(pointer(true)),
+				Sensitive:  convert.NewSensitive(new(true)),
 				Validators: convert.NewValidators(convert.ValidatorTypeObject, specschema.CustomValidators{}),
 			},
 			expected: `"object_attribute": schema.ObjectAttribute{
@@ -1555,7 +1555,7 @@ Sensitive: true,
 						String: &specschema.StringType{},
 					},
 				}),
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				Validators:  convert.NewValidators(convert.ValidatorTypeObject, specschema.CustomValidators{}),
 			},
 			expected: `"object_attribute": schema.ObjectAttribute{
@@ -1575,7 +1575,7 @@ MarkdownDescription: "description",
 						String: &specschema.StringType{},
 					},
 				}),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 				Validators:         convert.NewValidators(convert.ValidatorTypeObject, specschema.CustomValidators{}),
 			},
 			expected: `"object_attribute": schema.ObjectAttribute{

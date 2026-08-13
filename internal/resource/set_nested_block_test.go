@@ -606,10 +606,10 @@ func TestGeneratorSetNestedBlock_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &resource.SetNestedBlock{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorSetNestedBlock{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				NestedObject:       GeneratorNestedBlockObject{},
 				NestedBlockObject: NewNestedBlockObject(
 					generatorschema.GeneratorAttributes{},
@@ -625,10 +625,10 @@ func TestGeneratorSetNestedBlock_New(t *testing.T) {
 		},
 		"description": {
 			input: &resource.SetNestedBlock{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorSetNestedBlock{
-				Description:  convert.NewDescription(pointer("description")),
+				Description:  convert.NewDescription(new("description")),
 				NestedObject: GeneratorNestedBlockObject{},
 				NestedBlockObject: NewNestedBlockObject(
 					generatorschema.GeneratorAttributes{},
@@ -1768,7 +1768,7 @@ CustomType: my_custom_type,
 
 		"description": {
 			input: GeneratorSetNestedBlock{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				NestedBlockObject: NewNestedBlockObject(
 					generatorschema.GeneratorAttributes{},
 					generatorschema.GeneratorBlocks{},
@@ -1793,7 +1793,7 @@ MarkdownDescription: "description",
 
 		"deprecation-message": {
 			input: GeneratorSetNestedBlock{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 				NestedBlockObject: NewNestedBlockObject(
 					generatorschema.GeneratorAttributes{},
 					generatorschema.GeneratorBlocks{},

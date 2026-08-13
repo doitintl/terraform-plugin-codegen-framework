@@ -96,33 +96,33 @@ func TestGeneratorInt64Attribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &resource.Int64Attribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorInt64Attribute{
 				CustomType:         convert.NewCustomTypePrimitive(nil, nil, "name"),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				PlanModifiers:      convert.NewPlanModifiers(convert.PlanModifierTypeInt64, specschema.CustomPlanModifiers{}),
 				Validators:         convert.NewValidators(convert.ValidatorTypeInt64, specschema.CustomValidators{}),
 			},
 		},
 		"description": {
 			input: &resource.Int64Attribute{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorInt64Attribute{
 				CustomType:    convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Description:   convert.NewDescription(pointer("description")),
+				Description:   convert.NewDescription(new("description")),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeInt64, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeInt64, specschema.CustomValidators{}),
 			},
 		},
 		"sensitive": {
 			input: &resource.Int64Attribute{
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorInt64Attribute{
 				CustomType:    convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Sensitive:     convert.NewSensitive(pointer(true)),
+				Sensitive:     convert.NewSensitive(new(true)),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeInt64, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeInt64, specschema.CustomValidators{}),
 			},
@@ -198,7 +198,7 @@ func TestGeneratorInt64Attribute_New(t *testing.T) {
 						},
 						SchemaDefinition: "my_default.Default()",
 					},
-					Static: pointer(int64(1234)),
+					Static: new(int64(1234)),
 				},
 			},
 			expected: GeneratorInt64Attribute{
@@ -212,7 +212,7 @@ func TestGeneratorInt64Attribute_New(t *testing.T) {
 						},
 						SchemaDefinition: "my_default.Default()",
 					},
-					Static: pointer(int64(1234)),
+					Static: new(int64(1234)),
 				}),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeInt64, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeInt64, specschema.CustomValidators{}),
@@ -510,7 +510,7 @@ func TestGeneratorInt64Attribute_Imports(t *testing.T) {
 		"default-static": {
 			input: GeneratorInt64Attribute{
 				Default: convert.NewDefaultInt64(&specschema.Int64Default{
-					Static: pointer(int64(1234)),
+					Static: new(int64(1234)),
 				}),
 			},
 			expected: []code.Import{
@@ -730,7 +730,7 @@ Computed: true,
 
 		"sensitive": {
 			input: GeneratorInt64Attribute{
-				Sensitive: convert.NewSensitive(pointer(true)),
+				Sensitive: convert.NewSensitive(new(true)),
 			},
 			expected: `"int64_attribute": schema.Int64Attribute{
 Sensitive: true,
@@ -740,7 +740,7 @@ Sensitive: true,
 		// TODO: Do we need separate description and markdown description?
 		"description": {
 			input: GeneratorInt64Attribute{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 			},
 			expected: `"int64_attribute": schema.Int64Attribute{
 Description: "description",
@@ -750,7 +750,7 @@ MarkdownDescription: "description",
 
 		"deprecation-message": {
 			input: GeneratorInt64Attribute{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 			},
 			expected: `"int64_attribute": schema.Int64Attribute{
 DeprecationMessage: "deprecated",
@@ -798,7 +798,7 @@ my_other_plan_modifier.Modify(),
 		"default-static": {
 			input: GeneratorInt64Attribute{
 				Default: convert.NewDefaultInt64(&specschema.Int64Default{
-					Static: pointer(int64(1234)),
+					Static: new(int64(1234)),
 				}),
 			},
 			expected: `"int64_attribute": schema.Int64Attribute{

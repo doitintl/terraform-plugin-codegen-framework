@@ -286,7 +286,7 @@ func TestGeneratorSchema_ResolveTypeNameConflicts_Deterministic(t *testing.T) {
 
 	want := resolveAndCollect(build())
 
-	for i := 0; i < 50; i++ {
+	for i := range 50 {
 		if diff := cmp.Diff(resolveAndCollect(build()), want); diff != "" {
 			t.Fatalf("run %d differed: %s", i, diff)
 		}

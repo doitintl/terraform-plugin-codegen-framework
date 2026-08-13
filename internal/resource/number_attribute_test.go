@@ -96,33 +96,33 @@ func TestGeneratorNumberAttribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &resource.NumberAttribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorNumberAttribute{
 				CustomType:         convert.NewCustomTypePrimitive(nil, nil, "name"),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				PlanModifiers:      convert.NewPlanModifiers(convert.PlanModifierTypeNumber, specschema.CustomPlanModifiers{}),
 				Validators:         convert.NewValidators(convert.ValidatorTypeNumber, specschema.CustomValidators{}),
 			},
 		},
 		"description": {
 			input: &resource.NumberAttribute{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorNumberAttribute{
 				CustomType:    convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Description:   convert.NewDescription(pointer("description")),
+				Description:   convert.NewDescription(new("description")),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeNumber, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeNumber, specschema.CustomValidators{}),
 			},
 		},
 		"sensitive": {
 			input: &resource.NumberAttribute{
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorNumberAttribute{
 				CustomType:    convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Sensitive:     convert.NewSensitive(pointer(true)),
+				Sensitive:     convert.NewSensitive(new(true)),
 				PlanModifiers: convert.NewPlanModifiers(convert.PlanModifierTypeNumber, specschema.CustomPlanModifiers{}),
 				Validators:    convert.NewValidators(convert.ValidatorTypeNumber, specschema.CustomValidators{}),
 			},
@@ -695,7 +695,7 @@ Computed: true,
 
 		"sensitive": {
 			input: GeneratorNumberAttribute{
-				Sensitive: convert.NewSensitive(pointer(true)),
+				Sensitive: convert.NewSensitive(new(true)),
 			},
 			expected: `"number_attribute": schema.NumberAttribute{
 Sensitive: true,
@@ -705,7 +705,7 @@ Sensitive: true,
 		// TODO: Do we need separate description and markdown description?
 		"description": {
 			input: GeneratorNumberAttribute{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 			},
 			expected: `"number_attribute": schema.NumberAttribute{
 Description: "description",
@@ -715,7 +715,7 @@ MarkdownDescription: "description",
 
 		"deprecation-message": {
 			input: GeneratorNumberAttribute{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 			},
 			expected: `"number_attribute": schema.NumberAttribute{
 DeprecationMessage: "deprecated",

@@ -91,31 +91,31 @@ func TestGeneratorStringAttribute_New(t *testing.T) {
 		},
 		"deprecation_message": {
 			input: &datasource.StringAttribute{
-				DeprecationMessage: pointer("deprecation message"),
+				DeprecationMessage: new("deprecation message"),
 			},
 			expected: GeneratorStringAttribute{
 				CustomType:         convert.NewCustomTypePrimitive(nil, nil, "name"),
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecation message")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecation message")),
 				Validators:         convert.NewValidators(convert.ValidatorTypeString, specschema.CustomValidators{}),
 			},
 		},
 		"description": {
 			input: &datasource.StringAttribute{
-				Description: pointer("description"),
+				Description: new("description"),
 			},
 			expected: GeneratorStringAttribute{
 				CustomType:  convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 				Validators:  convert.NewValidators(convert.ValidatorTypeString, specschema.CustomValidators{}),
 			},
 		},
 		"sensitive": {
 			input: &datasource.StringAttribute{
-				Sensitive: pointer(true),
+				Sensitive: new(true),
 			},
 			expected: GeneratorStringAttribute{
 				CustomType: convert.NewCustomTypePrimitive(nil, nil, "name"),
-				Sensitive:  convert.NewSensitive(pointer(true)),
+				Sensitive:  convert.NewSensitive(new(true)),
 				Validators: convert.NewValidators(convert.ValidatorTypeString, specschema.CustomValidators{}),
 			},
 		},
@@ -252,7 +252,7 @@ Computed: true,
 
 		"sensitive": {
 			input: GeneratorStringAttribute{
-				Sensitive: convert.NewSensitive(pointer(true)),
+				Sensitive: convert.NewSensitive(new(true)),
 			},
 			expected: `"string_attribute": schema.StringAttribute{
 Sensitive: true,
@@ -262,7 +262,7 @@ Sensitive: true,
 		// TODO: Do we need separate description and markdown description?
 		"description": {
 			input: GeneratorStringAttribute{
-				Description: convert.NewDescription(pointer("description")),
+				Description: convert.NewDescription(new("description")),
 			},
 			expected: `"string_attribute": schema.StringAttribute{
 Description: "description",
@@ -272,7 +272,7 @@ MarkdownDescription: "description",
 
 		"deprecation-message": {
 			input: GeneratorStringAttribute{
-				DeprecationMessage: convert.NewDeprecationMessage(pointer("deprecated")),
+				DeprecationMessage: convert.NewDeprecationMessage(new("deprecated")),
 			},
 			expected: `"string_attribute": schema.StringAttribute{
 DeprecationMessage: "deprecated",
@@ -531,4 +531,3 @@ func TestGeneratorStringAttribute_AttrValue(t *testing.T) {
 		})
 	}
 }
-
