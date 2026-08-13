@@ -196,7 +196,7 @@ func (g GeneratorListNestedBlock) GetBlocks() schema.GeneratorBlocks {
 }
 
 func (g GeneratorListNestedBlock) CustomTypeAndValue(name string, generated map[string][]byte) ([]byte, error) {
-	return schema.DedupeGenerated(name, generated, func() ([]byte, error) {
+	renderDecl := func() ([]byte, error) {
 		var buf bytes.Buffer
 
 		attributeAttrValues, err := g.NestedObject.Attributes.AttrValues()
@@ -280,6 +280,12 @@ func (g GeneratorListNestedBlock) CustomTypeAndValue(name string, generated map[
 
 		buf.Write(b)
 
+		return buf.Bytes(), nil
+	}
+
+	renderChildren := func() ([]byte, error) {
+		var buf bytes.Buffer
+
 		attributeKeys := g.NestedObject.Attributes.SortedKeys()
 
 		blockKeys := g.NestedObject.Blocks.SortedKeys()
@@ -331,7 +337,9 @@ func (g GeneratorListNestedBlock) CustomTypeAndValue(name string, generated map[
 		}
 
 		return buf.Bytes(), nil
-	})
+	}
+
+	return schema.DedupeGenerated(name, generated, renderDecl, renderChildren)
 }
 
 func (g GeneratorListNestedBlock) ToFromFunctions(name string) ([]byte, error) {

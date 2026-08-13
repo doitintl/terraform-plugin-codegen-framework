@@ -1,0 +1,111 @@
+{
+  "datasources": [
+    {
+      "name": "example",
+      "schema": {
+        "attributes": [
+          {
+            "name": "summary",
+            "single_nested": {
+              "attributes": [
+                {
+                  "name": "aws",
+                  "single_nested": {
+                    "attributes": [
+                      {
+                        "name": "credits",
+                        "list_nested": {
+                          "computed_optional_required": "computed",
+                          "nested_object": {
+                            "attributes": [
+                              {
+                                "name": "cost",
+                                "single_nested": {
+                                  "attributes": [
+                                    {
+                                      "name": "amount",
+                                      "string": {
+                                        "computed_optional_required": "computed"
+                                      }
+                                    },
+                                    {
+                                      "name": "currency",
+                                      "string": {
+                                        "computed_optional_required": "computed"
+                                      }
+                                    }
+                                  ],
+                                  "computed_optional_required": "computed"
+                                }
+                              },
+                              {
+                                "name": "cost_type",
+                                "string": {
+                                  "computed_optional_required": "computed"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ],
+                    "computed_optional_required": "computed"
+                  }
+                },
+                {
+                  "name": "doit",
+                  "single_nested": {
+                    "attributes": [
+                      {
+                        "name": "credits",
+                        "list_nested": {
+                          "computed_optional_required": "computed",
+                          "nested_object": {
+                            "attributes": [
+                              {
+                                "name": "cost",
+                                "single_nested": {
+                                  "attributes": [
+                                    {
+                                      "name": "amount",
+                                      "string": {
+                                        "computed_optional_required": "computed"
+                                      }
+                                    },
+                                    {
+                                      "name": "currency",
+                                      "string": {
+                                        "computed_optional_required": "computed"
+                                      }
+                                    }
+                                  ],
+                                  "computed_optional_required": "computed"
+                                }
+                              },
+                              {
+                                "name": "cost_type",
+                                "string": {
+                                  "computed_optional_required": "computed"
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    ],
+                    "computed_optional_required": "computed"
+                  }
+                }
+              ],
+              "computed_optional_required": "computed"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "provider": {
+    "name": "example"
+  },
+  "version": "0.1"
+}

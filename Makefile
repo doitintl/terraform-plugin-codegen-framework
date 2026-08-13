@@ -40,6 +40,11 @@ testdata:
 		--package generated \
 		--output ./internal/cmd/testdata/sibling_collision/data_sources_output
 
+	go run ./cmd/tfplugingen-framework generate data-sources \
+		--input ./internal/cmd/testdata/shared_nested_subtree/ir.json \
+		--package generated \
+		--output ./internal/cmd/testdata/shared_nested_subtree/data_sources_output
+
 	go run ./cmd/tfplugingen-framework generate provider \
 		--input ./internal/cmd/testdata/custom_and_external/ir.json \
 		--package generated \

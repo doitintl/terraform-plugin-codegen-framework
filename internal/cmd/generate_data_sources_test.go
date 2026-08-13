@@ -29,6 +29,15 @@ func TestGenerateDataSourcesCommand(t *testing.T) {
 			irInputPath:   "testdata/sibling_collision/ir.json",
 			goldenFileDir: "testdata/sibling_collision/data_sources_output",
 		},
+		// Two siblings, "aws" and "doit", have the identical shape, so the
+		// "credits" object nested inside both legitimately shares one generated
+		// type. "credits" in turn nests a "cost" object, which only the
+		// occurrence rendered first emits. The golden output pins that this is
+		// treated as sharing rather than as a conflict.
+		"shared_nested_subtree": {
+			irInputPath:   "testdata/shared_nested_subtree/ir.json",
+			goldenFileDir: "testdata/shared_nested_subtree/data_sources_output",
+		},
 	}
 	for name, testCase := range testCases {
 
