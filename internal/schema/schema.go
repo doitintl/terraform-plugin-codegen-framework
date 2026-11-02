@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"log/slog"
+	"slices"
 	"sort"
 	"strings"
 	"text/template"
@@ -401,7 +402,7 @@ func disambiguate(fp typeFingerprint, name string, taken map[string]struct{}) st
 		ancestors = ancestors[:len(ancestors)-1]
 	}
 
-	for i := len(ancestors) - 1; i >= 0; i-- {
+	for i := range slices.Backward(ancestors) {
 		candidate := strings.Join(append(append([]string{}, ancestors[i:]...), name), "_")
 
 		if _, ok := taken[FrameworkIdentifier(candidate).ToPascalCase()]; !ok {
@@ -621,9 +622,7 @@ func (g GeneratorSchema) ToFromFunctions(ctx context.Context, logger *slog.Logge
 		if t, ok := g.Attributes[k].(ToFrom); ok {
 			b, err := t.ToFromFunctions(k)
 
-			var unimplErr *UnimplementedError
-
-			if errors.As(err, &unimplErr) {
+			if unimplErr, ok := errors.AsType[*UnimplementedError](err); ok {
 				logger.Error("error generating to/from methods", "path", fmt.Sprintf("%s.%s.%s", logging.GetPathFromContext(ctx), k, unimplErr.Path()), "err", err)
 			} else if err != nil {
 				return nil, err
@@ -647,9 +646,7 @@ func (g GeneratorSchema) ToFromFunctions(ctx context.Context, logger *slog.Logge
 		if t, ok := g.Blocks[k].(ToFrom); ok {
 			b, err := t.ToFromFunctions(k)
 
-			var unimplErr *UnimplementedError
-
-			if errors.As(err, &unimplErr) {
+			if unimplErr, ok := errors.AsType[*UnimplementedError](err); ok {
 				logger.Error("error generating to/from methods", "path", fmt.Sprintf("%s.%s.%s", logging.GetPathFromContext(ctx), k, unimplErr.Path()), "err", err)
 			} else if err != nil {
 				return nil, err
