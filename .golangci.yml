@@ -10,6 +10,7 @@ linters:
     - ineffassign
     - makezero
     - misspell
+    - modernize
     - nilerr
     - paralleltest
     - predeclared

@@ -198,9 +198,7 @@ func (g GeneratorAttributes) FromFuncs() (map[string]ToFromConversion, error) {
 		if a, ok := g[k].(From); ok {
 			v, err := a.From()
 
-			var unimplError *UnimplementedError
-
-			if errors.As(err, &unimplError) {
+			if unimplError, ok := errors.AsType[*UnimplementedError](err); ok {
 				err = unimplError.NestedUnimplementedError(k)
 			}
 
@@ -270,9 +268,7 @@ func (g GeneratorAttributes) ToFuncs() (map[string]ToFromConversion, error) {
 		if a, ok := g[k].(To); ok {
 			v, err := a.To()
 
-			var unimplError *UnimplementedError
-
-			if errors.As(err, &unimplError) {
+			if unimplError, ok := errors.AsType[*UnimplementedError](err); ok {
 				err = unimplError.NestedUnimplementedError(k)
 			}
 
